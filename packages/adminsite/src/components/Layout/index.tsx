@@ -1,34 +1,13 @@
 import { useState } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { Button, Layout, Menu } from 'antd'
-import type { MenuProps } from 'antd'
+import { Outlet } from 'react-router-dom'
+import { Layout } from 'antd'
+import BasicHeader from '../Header'
+import BasicSider from '../Sider'
 
 const { Header, Sider, Content } = Layout
 
-const items: MenuProps['items'] = [
-  {
-    label: 'home',
-    path: '/home'
-  },
-  {
-    label: 'about',
-    path: '/about'
-  }
-].map((nav) => ({
-  key: nav.path,
-  icon: null,
-  label: nav.label
-}))
-
 const BasicLayout = () => {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-
   const [collapsed, setCollapsed] = useState(false)
-
-  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
-    navigate(key)
-  }
 
   return (
     <Layout style={{ height: '100vh' }}>
@@ -41,13 +20,11 @@ const BasicLayout = () => {
             zIndex: 200
           }}
         />
-        <Menu mode="inline" defaultSelectedKeys={[pathname]} items={items} onClick={handleMenuClick} />
+        <BasicSider collapsed={collapsed} />
       </Sider>
       <Layout style={{ display: 'flex', flexDirection: 'column' }}>
         <Header style={{ background: '#fff', padding: 0 }}>
-          <Button type="text" onClick={() => setCollapsed(!collapsed)}>
-            collapsed
-          </Button>
+          <BasicHeader onClick={() => setCollapsed(!collapsed)} />
         </Header>
         <Content style={{ padding: '16px', flex: 1, overflowY: 'auto' }}>
           <Outlet />
