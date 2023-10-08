@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { HiSun, HiMoon } from 'react-icons/hi'
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)
@@ -14,10 +15,16 @@ export function ThemeSwitcher() {
   if (!mounted) return null
 
   return (
-    <div>
-      The current theme is: {theme}
-      <button onClick={() => setTheme('light')}>Light Mode</button>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
+    <div className="hidden md:flex cursor-pointer">
+      {theme === 'dark' ? (
+        <div onClick={() => setTheme('light')}>
+          <HiSun size={25} />
+        </div>
+      ) : (
+        <div onClick={() => setTheme('dark')}>
+          <HiMoon size={25} />
+        </div>
+      )}
     </div>
   )
 }
