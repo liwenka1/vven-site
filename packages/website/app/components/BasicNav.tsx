@@ -10,31 +10,21 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-  Input,
   DropdownItem,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
-  Avatar
+  Avatar,
+  Button,
+  Kbd
 } from '@nextui-org/react'
 import { ThemeSwitcher } from '../components/ThemeSwitcher'
-import { FiSearch } from 'react-icons/fi'
+import { RiSearchLine } from 'react-icons/ri'
 
 export default function BasicNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const menuItems = [
-    'Profile',
-    'Dashboard',
-    'Activity',
-    'Analytics',
-    'System',
-    'Deployments',
-    'My Settings',
-    'Team Settings',
-    'Help & Feedback',
-    'Log Out'
-  ]
+  const menuItems = ['Posts', 'Tags', 'About']
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -46,35 +36,31 @@ export default function BasicNav() {
       </NavbarContent>
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/">
             Posts
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+          <Link href="/" aria-current="page">
             Tags
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/">
             About
           </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="end">
         <ThemeSwitcher />
-        <Input
-          classNames={{
-            base: 'hidden md:flex max-w-full md:max-w-[10rem] h-10',
-            mainWrapper: 'h-full',
-            input: 'text-small',
-            inputWrapper: 'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20'
-          }}
-          placeholder="Type to search..."
-          size="sm"
-          startContent={<FiSearch size={18} />}
-          type="search"
-        />
+        <div className="flex md:hidden cursor-pointer">
+          <RiSearchLine size={20} />
+        </div>
+        <Button className="hidden md:flex justify-between" size="sm" type="button">
+          <RiSearchLine size={18} />
+          <span>Quick Search...</span>
+          <Kbd keys={['command', 'shift']}>K</Kbd>
+        </Button>
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -93,11 +79,6 @@ export default function BasicNav() {
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
             <DropdownItem key="logout" color="danger">
               Log Out
             </DropdownItem>
@@ -110,7 +91,7 @@ export default function BasicNav() {
             <Link
               color={index === 2 ? 'primary' : index === menuItems.length - 1 ? 'danger' : 'foreground'}
               className="w-full"
-              href="#"
+              href="/"
               size="lg"
             >
               {item}
