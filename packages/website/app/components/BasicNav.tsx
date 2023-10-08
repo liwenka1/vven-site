@@ -14,14 +14,12 @@ import {
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
-  Avatar,
-  Button,
-  Kbd
+  Avatar
 } from '@nextui-org/react'
-import { ThemeSwitcher } from '../components/ThemeSwitcher'
-import { RiSearchLine } from 'react-icons/ri'
+import SearchButton from './SearchButton'
+import ThemeSwitcher from './ThemeSwitcher'
 
-export default function BasicNav() {
+const BasicNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const menuItems = ['Posts', 'Tags', 'About']
@@ -53,14 +51,7 @@ export default function BasicNav() {
       </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="end">
         <ThemeSwitcher />
-        <div className="flex md:hidden cursor-pointer">
-          <RiSearchLine size={20} />
-        </div>
-        <Button className="hidden md:flex justify-between" size="sm" type="button">
-          <RiSearchLine size={18} />
-          <span>Quick Search...</span>
-          <Kbd keys={['command', 'shift']}>K</Kbd>
-        </Button>
+        <SearchButton />
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -102,3 +93,5 @@ export default function BasicNav() {
     </Navbar>
   )
 }
+
+export default BasicNav

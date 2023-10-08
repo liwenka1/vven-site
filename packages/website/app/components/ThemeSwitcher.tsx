@@ -1,7 +1,7 @@
 import { useTheme } from 'next-themes'
 import { RiSunFill, RiMoonFill } from 'react-icons/ri'
 
-export function ThemeSwitcher() {
+const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme()
 
   return (
@@ -18,3 +18,5 @@ export function ThemeSwitcher() {
     </div>
   )
 }
+
+export default ThemeSwitcher
