@@ -9,9 +9,7 @@ interface userInfoState {
 const useUserInfoStore = create<userInfoState>()(
   persist(
     (set) => ({
-      userInfo: {
-        token: '123'
-      },
+      userInfo: null,
       setUserInfo: (userInfo) => set(() => ({ userInfo }))
     }),
     { name: 'userInfo' }

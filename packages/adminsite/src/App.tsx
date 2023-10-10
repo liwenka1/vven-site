@@ -6,7 +6,6 @@ import dayjs from 'dayjs'
 import zhCN from 'antd/locale/zh_CN'
 import 'dayjs/locale/zh-cn'
 import 'antd/dist/reset.css'
-import './index.css'
 
 dayjs.locale('zh-cn')
 
