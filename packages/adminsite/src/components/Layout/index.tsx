@@ -20,7 +20,7 @@ const BasicLayout = () => {
             zIndex: 200
           }}
         />
-        <BasicSider collapsed={collapsed} />
+        <BasicSider />
       </Sider>
       <Layout style={{ display: 'flex', flexDirection: 'column' }}>
         <Header style={{ background: '#fff', padding: 0 }}>
