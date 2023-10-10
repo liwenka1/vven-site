@@ -13,10 +13,10 @@ const getItem = (
   type?: 'group'
 ): MenuItem => {
   return {
+    label,
     key,
     icon,
     children,
-    label,
     type
   } as MenuItem
 }
@@ -30,11 +30,7 @@ const items: MenuItem[] = [
   getItem('关于', '/about', <ContainerOutlined />)
 ]
 
-interface BasicSiderProps {
-  collapsed: boolean
-}
-
-const BasicSider: React.FC<BasicSiderProps> = ({ collapsed }) => {
+const BasicSider = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -44,14 +40,7 @@ const BasicSider: React.FC<BasicSiderProps> = ({ collapsed }) => {
 
   return (
     <div className="w-full h-full">
-      <Menu
-        onClick={handleMenuClick}
-        defaultSelectedKeys={[pathname]}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={collapsed}
-        items={items}
-      />
+      <Menu onClick={handleMenuClick} selectedKeys={[pathname]} mode="inline" theme="light" items={items} />
     </div>
   )
 }
