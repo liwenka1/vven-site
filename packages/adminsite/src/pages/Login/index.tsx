@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { LoginParams, RegisterParams } from '@/api/user/type'
+import { LoginParams, RegisterParams, ResetParams } from '@/api/user/type'
 import useUserInfoStore from '@/stores/userInfo'
 import { CustomError } from '@/type'
 import { LockOutlined, MailOutlined, RedditOutlined, UserOutlined } from '@ant-design/icons'
@@ -13,23 +13,42 @@ const Login = () => {
   const { setUserInfo } = useUserInfoStore()
   const navigate = useNavigate()
 
+  const [formDisabled, setFormDisabled] = useState<boolean>(false)
   const onFinish = async (values: unknown) => {
-    console.log('REGISTER:', values)
     try {
+      setFormDisabled(true)
       if (variant === 'REGISTER') {
-        const res = await userApi.register(values as RegisterParams)
-        console.log(res)
+        const registerParams: RegisterParams = values as RegisterParams
+        await userApi.register(registerParams)
+        const loginParams: LoginParams = {
+          username: registerParams.username,
+          password: registerParams.password
+        }
+        login(loginParams)
+      }
+      if (variant === 'RESET') {
+        const resetParams: ResetParams = values as ResetParams
+        await userApi.reset(resetParams)
+        const loginParams: LoginParams = {
+          username: resetParams.username,
+          password: resetParams.password
+        }
+        login(loginParams)
       }
       if (variant === 'LOGIN') {
-        const res = await userApi.login(values as LoginParams)
-        setUserInfo(res as Record<string, unknown>)
-        console.log(res)
+        login(values as LoginParams)
       }
-      navigate('/')
     } catch (error) {
       const customError = error as CustomError
       warning(customError.message)
+    } finally {
+      setFormDisabled(false)
     }
+  }
+  const login = async (loginParams: LoginParams) => {
+    const res = await userApi.login(loginParams)
+    setUserInfo(res as Record<string, unknown>)
+    navigate('/')
   }
 
   const [variant, setVariant] = useState<Variant>('LOGIN')
@@ -64,6 +83,7 @@ const Login = () => {
           name="normal_login"
           className="w-[500px] bg-white pt-12 shadow rounded-lg px-10"
           initialValues={{ remember: true }}
+          disabled={formDisabled}
           onFinish={onFinish}
         >
           {variant !== 'LOGIN' && (

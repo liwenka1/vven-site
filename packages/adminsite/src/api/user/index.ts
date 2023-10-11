@@ -1,5 +1,5 @@
 import { http } from '@/utils/request'
-import { LoginParams, RegisterParams } from './type'
+import { LoginParams, RegisterParams, ResetParams } from './type'
 
 export const userApi = {
   register: (params: RegisterParams) => {
@@ -7,5 +7,8 @@ export const userApi = {
   },
   login: (params: LoginParams) => {
     return http.post('/user/login', params)
+  },
+  reset: (params: ResetParams) => {
+    return http.post('/user/reset', params)
   }
 }

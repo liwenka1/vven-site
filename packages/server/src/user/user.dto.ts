@@ -18,3 +18,9 @@ export interface UserInfoDto {
   role: string
   token: string
 }
+
+export interface UserResetDto {
+  username: string
+  password: string
+  email: string
+}

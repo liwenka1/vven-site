@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { UserRegisterDto, UserLoginDto, UserInfoDto } from './user.dto'
+import { UserRegisterDto, UserLoginDto, UserInfoDto, UserResetDto } from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from 'src/common/exceptions/custom.business'
@@ -57,6 +57,31 @@ export class UserService {
         role: first.role,
         token: token
       }
+    }
+  }
+
+  async reset(userResetDto: UserResetDto): Promise<boolean> {
+    const first = await this.prisma.user.findFirst({
+      where: {
+        username: userResetDto.username
+      }
+    })
+    if (!first) {
+      throw new CustomException('用户不存在！')
+    } else if (first.email !== userResetDto.email) {
+      throw new CustomException('邮箱错误！')
+    } else {
+      await this.prisma.user.update({
+        where: {
+          id: first.id
+        },
+        data: {
+          username: userResetDto.username,
+          password: md5(userResetDto.password),
+          email: userResetDto.email
+        }
+      })
+      return true
     }
   }
 }

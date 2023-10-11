@@ -9,3 +9,9 @@ export interface LoginParams {
   username: string
   password: string
 }
+
+export interface ResetParams {
+  username: string
+  password: string
+  email: string
+}
