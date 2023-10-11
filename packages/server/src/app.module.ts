@@ -7,19 +7,9 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { BaseExceptionFilter } from './common/exceptions/base.exception.filter'
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter'
 import { UserModule } from './user/user.module'
-import { JwtModule } from '@nestjs/jwt'
 
 @Module({
-  imports: [
-    JwtModule.register({
-      global: true,
-      secret: 'liwenkai',
-      signOptions: {
-        expiresIn: '7d'
-      }
-    }),
-    UserModule
-  ],
+  imports: [UserModule],
   controllers: [AppController],
   providers: [
     AppService,

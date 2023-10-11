@@ -9,3 +9,12 @@ export interface UserLoginDto {
   username: string
   password: string
 }
+
+export interface UserInfoDto {
+  avatar_url: string
+  username: string
+  email: string
+  nickname: string
+  role: string
+  token: string
+}

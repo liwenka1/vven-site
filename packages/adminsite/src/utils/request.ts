@@ -43,7 +43,7 @@ class Request {
           return Promise.reject(response.data)
         }
 
-        return response.data
+        return response.data.data
       },
       (err) => {
         if (err.response?.status === 401) {

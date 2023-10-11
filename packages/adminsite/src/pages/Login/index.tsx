@@ -22,9 +22,9 @@ const Login = () => {
       }
       if (variant === 'LOGIN') {
         const res = await userApi.login(values as LoginParams)
+        setUserInfo(res as Record<string, unknown>)
         console.log(res)
       }
-      setUserInfo({ token: 'success' })
       navigate('/')
     } catch (error) {
       const customError = error as CustomError
