@@ -14,6 +14,9 @@ async function bootstrap() {
   // 日志
   app.use(logger)
 
+  // 允许跨域访问的配置
+  app.enableCors()
+
   await app.listen(4000)
 
   if (module.hot) {

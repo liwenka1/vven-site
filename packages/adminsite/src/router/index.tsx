@@ -60,7 +60,7 @@ const routes: RouteObject[] = [
 ]
 
 const browserRouter = createBrowserRouter(routes, {
-  basename: '/'
+  basename: import.meta.env.VITE_BASE_URL
 })
 
 export default browserRouter
