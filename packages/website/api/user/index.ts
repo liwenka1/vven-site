@@ -1,8 +1,8 @@
 import { http } from '@/app/utils/request'
-import { LoginParams } from './type'
+import { LoginParams, LoginData } from './type'
 
 export const userApi = {
   login: (params: LoginParams) => {
-    return http.post('/user/login', params)
+    return http.post<LoginData>('/user/login', params)
   }
 }

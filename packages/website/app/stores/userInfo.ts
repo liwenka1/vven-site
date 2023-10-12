@@ -1,8 +1,9 @@
+import { LoginData } from '@/api/user/type'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface userInfoState {
-  userInfo: Record<string, unknown> | null
+  userInfo: LoginData | null
   setUserInfo: (info: userInfoState['userInfo']) => void
 }
 
