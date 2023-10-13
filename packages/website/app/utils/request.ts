@@ -20,8 +20,8 @@ class Request {
 
     // 请求拦截器
     this.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-      if (useUserInfoStore.getState().userInfo) {
-        const token = useUserInfoStore.getState().userInfo
+      if (useUserInfoStore.getState().token) {
+        const token = useUserInfoStore.getState().token
         if (token) config.headers['x-token'] = `Bearer ${token}`
       }
 

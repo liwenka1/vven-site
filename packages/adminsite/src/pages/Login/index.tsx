@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 type Variant = 'LOGIN' | 'REGISTER' | 'RESET'
 
 const Login = () => {
-  const { setUserInfo } = useUserInfoStore()
+  const { setToken, setUserInfo } = useUserInfoStore()
   const navigate = useNavigate()
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false)
@@ -45,9 +45,9 @@ const Login = () => {
   }
   const login = async (loginParams: LoginParams) => {
     const res = await userApi.login(loginParams)
-    setUserInfo(res as Record<string, unknown>)
+    setToken(res as string)
     const profile = await userApi.profile()
-    console.log(profile)
+    setUserInfo(profile as Record<string, unknown>)
     navigate('/')
   }
 
