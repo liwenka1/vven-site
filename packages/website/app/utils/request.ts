@@ -20,10 +20,10 @@ class Request {
 
     // 请求拦截器
     this.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-      // if (config.url !== '/login') {
-      //   const token = useUserInfoStore.getState().userInfo?.token
-      //   if (token) config.headers['x-token'] = token
-      // }
+      if (useUserInfoStore.getState().userInfo) {
+        const token = useUserInfoStore.getState().userInfo
+        if (token) config.headers['x-token'] = `Bearer ${token}`
+      }
 
       const controller = new AbortController()
       const url = config.url || ''
@@ -43,7 +43,7 @@ class Request {
           return Promise.reject(response.data)
         }
 
-        return response.data.data
+        return response.data
       },
       (err) => {
         if (err.response?.status === 401) {

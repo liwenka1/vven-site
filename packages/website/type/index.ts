@@ -1,7 +1,3 @@
-export interface CustomError {
-  message: string
-}
-
 export interface ResponseData<T> {
   data: T
   status: number
