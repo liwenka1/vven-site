@@ -10,5 +10,8 @@ export const userApi = {
   },
   reset: (params: ResetParams) => {
     return http.post('/user/reset', params)
+  },
+  profile: () => {
+    return http.get('user/profile')
   }
 }

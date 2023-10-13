@@ -25,8 +25,7 @@ const Login = () => {
           password: registerParams.password
         }
         login(loginParams)
-      }
-      if (variant === 'RESET') {
+      } else if (variant === 'RESET') {
         const resetParams: ResetParams = values as ResetParams
         await userApi.reset(resetParams)
         const loginParams: LoginParams = {
@@ -34,8 +33,7 @@ const Login = () => {
           password: resetParams.password
         }
         login(loginParams)
-      }
-      if (variant === 'LOGIN') {
+      } else if (variant === 'LOGIN') {
         login(values as LoginParams)
       }
     } catch (error) {
@@ -48,6 +46,8 @@ const Login = () => {
   const login = async (loginParams: LoginParams) => {
     const res = await userApi.login(loginParams)
     setUserInfo(res as Record<string, unknown>)
+    const profile = await userApi.profile()
+    console.log(profile)
     navigate('/')
   }
 
@@ -73,6 +73,12 @@ const Login = () => {
       type: 'warning',
       content: content
     })
+  }
+
+  const buttonTexts = {
+    LOGIN: 'Sign in',
+    REGISTER: 'Register',
+    RESET: 'Reset'
   }
 
   return (
@@ -117,9 +123,7 @@ const Login = () => {
 
           <Form.Item>
             <Button type="primary" className="w-full" htmlType="submit">
-              {variant === 'LOGIN' && 'Sign in'}
-              {variant === 'REGISTER' && 'Register'}
-              {variant === 'RESET' && 'Reset'}
+              {buttonTexts[variant]}
             </Button>
             <div className="flex gap-2 justify-center text-sm mt-6">
               <span> {variant === 'REGISTER' ? 'Alreacy have an account?' : 'New to Here'}</span>

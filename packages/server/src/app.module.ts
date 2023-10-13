@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { PrismaService } from './prisma/prisma.service'
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core'
 import { TransformInterceptor } from './common/interceptors/transform.interceptor'
 import { BaseExceptionFilter } from './common/exceptions/base.exception.filter'
@@ -13,7 +12,6 @@ import { UserModule } from './user/user.module'
   controllers: [AppController],
   providers: [
     AppService,
-    PrismaService,
     {
       // 全局拦截器
       provide: APP_INTERCEPTOR,

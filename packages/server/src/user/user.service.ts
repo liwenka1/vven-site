@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/prisma/prisma.service'
-import { UserRegisterDto, UserLoginDto, UserInfoDto, UserResetDto } from './user.dto'
+import { PrismaService } from '@/prisma/prisma.service'
+import { UserRegisterDto, UserLoginDto, UserResetDto } from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
-import { CustomException } from 'src/common/exceptions/custom.business'
+import { CustomException } from '@/common/exceptions/custom.business'
+import { User } from '@prisma/client'
 
 const md5 = (s: string) => {
   return crypto.createHash('md5').update(s).digest('hex')
@@ -37,27 +38,17 @@ export class UserService {
     }
   }
 
-  async login(userLogin: UserLoginDto): Promise<UserInfoDto> {
-    const first = await this.prisma.user.findFirst({
+  async findOne(username: string): Promise<User | undefined> {
+    return await this.prisma.user.findFirst({
       where: {
-        username: userLogin.username
+        username: username
       }
     })
-    if (!first) {
-      throw new CustomException('用户不存在！')
-    } else if (first.password !== md5(userLogin.password)) {
-      throw new CustomException('用户密码错误！')
-    } else {
-      const token = this.jwt.sign(userLogin)
-      return {
-        avatar_url: first.avatar_url,
-        username: first.username,
-        email: first.email,
-        nickname: first.nickname,
-        role: first.role,
-        token: token
-      }
-    }
+  }
+
+  async login(userLogin: UserLoginDto): Promise<string> {
+    const token = this.jwt.sign(userLogin)
+    return token
   }
 
   async reset(userResetDto: UserResetDto): Promise<boolean> {

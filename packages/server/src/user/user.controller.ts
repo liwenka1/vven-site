@@ -1,6 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service'
-import { UserInfoDto, UserLoginDto, UserRegisterDto, UserResetDto } from './user.dto'
+import { UserRegisterDto, UserResetDto } from './user.dto'
+import { AuthGuard } from '@nestjs/passport'
+import { Public } from '@/common/metadata/public.metadata'
 
 @Controller('user')
 export class UserController {
@@ -11,9 +13,16 @@ export class UserController {
     return this.userService.register(userRegister)
   }
 
+  @UseGuards(AuthGuard('local'))
+  @Public()
   @Post('login')
-  login(@Body() userLogin: UserLoginDto): Promise<UserInfoDto> {
-    return this.userService.login(userLogin)
+  login(@Request() req): Promise<string> {
+    return this.userService.login(req.user)
+  }
+
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user
   }
 
   @Post('reset')
