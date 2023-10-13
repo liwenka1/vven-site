@@ -57,6 +57,23 @@ class Request {
     )
   }
 
+  // 取消全部请求
+  cancelAllRequest() {
+    this.abortControllerMap.forEach((controller) => {
+      controller.abort()
+    })
+    this.abortControllerMap.clear()
+  }
+
+  // 取消指定的请求
+  cancelRequest(url: string | string[]) {
+    const urlList = Array.isArray(url) ? url : [url]
+    for (const _url of urlList) {
+      this.abortControllerMap.get(_url)?.abort()
+      this.abortControllerMap.delete(_url)
+    }
+  }
+
   request<T>(config: AxiosRequestConfig): Promise<T> {
     return this.instance.request(config)
   }
