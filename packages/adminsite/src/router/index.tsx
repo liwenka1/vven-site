@@ -7,7 +7,7 @@ import Login from '@/pages/Login'
 import useUserInfoStore from '@/stores/userInfo'
 
 const authLoader = () => {
-  const token = useUserInfoStore.getState().userInfo?.token
+  const token = useUserInfoStore.getState().token
 
   if (!token) {
     return redirect(`/login?to=${window.location.pathname + window.location.search}`)

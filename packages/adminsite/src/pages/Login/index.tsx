@@ -1,7 +1,7 @@
 import { userApi } from '@/api/user'
 import { LoginParams, RegisterParams, ResetParams } from '@/api/user/type'
 import useUserInfoStore from '@/stores/userInfo'
-import { CustomError } from '@/type'
+import { ResponseData } from '@/type'
 import { LockOutlined, MailOutlined, RedditOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import { useCallback, useState } from 'react'
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 type Variant = 'LOGIN' | 'REGISTER' | 'RESET'
 
 const Login = () => {
-  const { setToken, setUserInfo } = useUserInfoStore()
+  const { setToken, setProfile } = useUserInfoStore()
   const navigate = useNavigate()
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false)
@@ -37,18 +37,24 @@ const Login = () => {
         login(values as LoginParams)
       }
     } catch (error) {
-      const customError = error as CustomError
+      const customError = error as ResponseData<unknown>
       warning(customError.message)
     } finally {
       setFormDisabled(false)
+      success('登录成功！')
     }
   }
   const login = async (loginParams: LoginParams) => {
-    const res = await userApi.login(loginParams)
-    setToken(res as string)
-    const profile = await userApi.profile()
-    setUserInfo(profile as Record<string, unknown>)
-    navigate('/')
+    try {
+      const token = await userApi.login(loginParams)
+      setToken(token.data)
+      const profile = await userApi.profile()
+      setProfile(profile.data)
+      navigate('/')
+    } catch (error) {
+      const customError = error as ResponseData<unknown>
+      warning(customError.message)
+    }
   }
 
   const [variant, setVariant] = useState<Variant>('LOGIN')
@@ -71,6 +77,12 @@ const Login = () => {
   const warning = (content: string) => {
     messageApi.open({
       type: 'warning',
+      content: content
+    })
+  }
+  const success = (content: string) => {
+    messageApi.open({
+      type: 'success',
       content: content
     })
   }

@@ -43,12 +43,12 @@ class Request {
           return Promise.reject(response.data)
         }
 
-        return response.data.data
+        return response.data
       },
       (err) => {
         if (err.response?.status === 401) {
           // 登录态失效，清空userInfo，跳转登录页
-          useUserInfoStore.setState({ userInfo: null })
+          useUserInfoStore.setState({ token: null, profile: null })
           window.location.href = `/login?redirect=${window.location.pathname}`
         }
 

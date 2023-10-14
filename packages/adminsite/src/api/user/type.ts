@@ -13,3 +13,15 @@ export interface LoginParams extends CommonUserParams {}
 export interface ResetParams extends CommonUserParams {
   email: string
 }
+
+export interface Profile {
+  id: number
+  username: string
+  nickname: string
+  email: string
+  create_time: string
+  avatar_url: string
+  role: string
+  iat: number
+  exp: number
+}

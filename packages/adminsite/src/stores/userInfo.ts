@@ -1,11 +1,12 @@
+import { Profile } from '@/api/user/type'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface userInfoState {
   token: string | null
-  setToken: (token: string) => void
-  userInfo: Record<string, unknown> | null
-  setUserInfo: (info: userInfoState['userInfo']) => void
+  setToken: (token: userInfoState['token']) => void
+  profile: Profile | null
+  setProfile: (info: userInfoState['profile']) => void
 }
 
 const useUserInfoStore = create<userInfoState>()(
@@ -13,8 +14,8 @@ const useUserInfoStore = create<userInfoState>()(
     (set) => ({
       token: null,
       setToken: (token) => set(() => ({ token })),
-      userInfo: null,
-      setUserInfo: (userInfo) => set(() => ({ userInfo }))
+      profile: null,
+      setProfile: (profile) => set(() => ({ profile }))
     }),
     { name: 'userInfo' }
   )
