@@ -8,17 +8,21 @@ import {
   NavbarItem,
   NavbarMenuToggle,
   NavbarMenu,
-  NavbarMenuItem,
-  Link
+  NavbarMenuItem
 } from '@nextui-org/react'
+import Link from 'next/link'
 import SearchButton from './SearchButton'
 import ThemeSwitcher from './ThemeSwitcher'
 import LoginButton from './LoginButton'
+import { usePathname } from 'next/navigation'
+import clsx from 'clsx'
 
 const BasicNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const menuItems = ['Posts', 'Tags', 'About']
+
+  const path = usePathname()
 
   return (
     <>
@@ -26,25 +30,22 @@ const BasicNav = () => {
         <NavbarContent>
           <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
           <NavbarBrand>
-            <p className="font-bold text-inherit">VVenKAI</p>
+            <Link className="font-bold text-inherit" href="/">
+              VVenKAI
+            </Link>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="hidden md:flex gap-4" justify="center">
-          <NavbarItem>
-            <Link color="foreground" href="/">
-              Posts
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="/" aria-current="page">
-              Tags
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="/">
-              About
-            </Link>
-          </NavbarItem>
+          {menuItems.map((item, index) => (
+            <NavbarItem key={`${item}-${index}`}>
+              <Link
+                className={clsx(`/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4')}
+                href={item.toLocaleLowerCase()}
+              >
+                {item}
+              </Link>
+            </NavbarItem>
+          ))}
         </NavbarContent>
         <NavbarContent as="div" className="items-center" justify="end">
           <ThemeSwitcher />
@@ -55,10 +56,8 @@ const BasicNav = () => {
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
-                color={index === 2 ? 'primary' : index === menuItems.length - 1 ? 'danger' : 'foreground'}
-                className="w-full"
-                href="/"
-                size="lg"
+                className={clsx(`w-full`, `/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4')}
+                href={item.toLocaleLowerCase()}
               >
                 {item}
               </Link>

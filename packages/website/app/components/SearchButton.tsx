@@ -1,8 +1,39 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Kbd, useDisclosure } from '@nextui-org/react'
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Kbd,
+  useDisclosure,
+  Input,
+  Listbox,
+  ListboxItem
+} from '@nextui-org/react'
 import { RiSearchLine } from 'react-icons/ri'
 
 const SearchButton = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+  const items = [
+    {
+      key: 'new',
+      label: 'New file'
+    },
+    {
+      key: 'copy',
+      label: 'Copy link'
+    },
+    {
+      key: 'edit',
+      label: 'Edit file'
+    },
+    {
+      key: 'delete',
+      label: 'Delete file'
+    }
+  ]
 
   return (
     <>
@@ -14,35 +45,34 @@ const SearchButton = () => {
         <span>Quick Search...</span>
         <Kbd keys={['ctrl']}>K</Kbd>
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center" size="2xl" backdrop="blur">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center" size="2xl" backdrop="blur" hideCloseButton>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+              <ModalHeader />
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non risus hendrerit
-                  venenatis. Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non risus hendrerit
-                  venenatis. Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit
-                  dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim laboris
-                  do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <Input
+                  className="w-full"
+                  placeholder="Search"
+                  labelPlacement="outside"
+                  startContent={
+                    <RiSearchLine className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                  }
+                  endContent={<Kbd>ESC</Kbd>}
+                />
+                <Listbox items={items} aria-label="Dynamic Actions" onAction={(key) => alert(key)}>
+                  {(item) => (
+                    <ListboxItem
+                      key={item.key}
+                      color={item.key === 'delete' ? 'danger' : 'default'}
+                      className={item.key === 'delete' ? 'text-danger' : ''}
+                    >
+                      {item.label}
+                    </ListboxItem>
+                  )}
+                </Listbox>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
+              <ModalFooter />
             </>
           )}
         </ModalContent>
