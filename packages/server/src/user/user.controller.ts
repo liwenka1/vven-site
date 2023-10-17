@@ -8,11 +8,6 @@ import { Public } from '@/common/metadata/public.metadata'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
-  register(@Body() userRegister: UserRegisterDto): Promise<boolean> {
-    return this.userService.register(userRegister)
-  }
-
   @UseGuards(AuthGuard('local'))
   @Public()
   @Post('login')
@@ -25,6 +20,13 @@ export class UserController {
     return req.user
   }
 
+  @Public()
+  @Post('register')
+  register(@Body() userRegister: UserRegisterDto): Promise<boolean> {
+    return this.userService.register(userRegister)
+  }
+
+  @Public()
   @Post('reset')
   reset(@Body() userResetDto: UserResetDto): Promise<boolean> {
     return this.userService.reset(userResetDto)

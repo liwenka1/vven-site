@@ -4,14 +4,20 @@ import useUserInfoStore from '@/stores/userInfo'
 import { ResponseData } from '@/type'
 import { LockOutlined, MailOutlined, RedditOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type Variant = 'LOGIN' | 'REGISTER' | 'RESET'
 
 const Login = () => {
-  const { setToken, setProfile } = useUserInfoStore()
+  const { token, setToken, setProfile } = useUserInfoStore()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+  }, [navigate, token])
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false)
   const onFinish = async (values: unknown) => {
@@ -41,7 +47,6 @@ const Login = () => {
       warning(customError.message)
     } finally {
       setFormDisabled(false)
-      success('登录成功！')
     }
   }
   const login = async (loginParams: LoginParams) => {
@@ -51,6 +56,7 @@ const Login = () => {
       const profile = await userApi.profile()
       setProfile(profile.data)
       navigate('/')
+      success('登录成功！')
     } catch (error) {
       const customError = error as ResponseData<unknown>
       warning(customError.message)

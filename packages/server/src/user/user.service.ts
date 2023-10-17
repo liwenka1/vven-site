@@ -5,6 +5,7 @@ import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
 import { User } from '@prisma/client'
+import { Role } from '@/common/enums/role.enum'
 
 const md5 = (s: string) => {
   return crypto.createHash('md5').update(s).digest('hex')
@@ -17,29 +18,8 @@ export class UserService {
     private readonly jwt: JwtService
   ) {}
 
-  async register(userRegister: UserRegisterDto): Promise<boolean> {
-    const first = await this.prisma.user.findFirst({
-      where: {
-        username: userRegister.username
-      }
-    })
-    if (first) {
-      throw new CustomException('用户已存在！')
-    } else {
-      await this.prisma.user.create({
-        data: {
-          username: userRegister.username,
-          password: md5(userRegister.password),
-          nickname: userRegister.nickname,
-          email: userRegister.email
-        }
-      })
-      return true
-    }
-  }
-
-  async findOne(username: string): Promise<User | undefined> {
-    return await this.prisma.user.findFirst({
+  findOne(username: string): Promise<User | undefined> {
+    return this.prisma.user.findFirst({
       where: {
         username: username
       }
@@ -51,12 +31,44 @@ export class UserService {
     return token
   }
 
+  async isFirstUser(): Promise<boolean> {
+    const count = await this.prisma.user.count()
+    return count === 0
+  }
+
+  async register(userRegister: UserRegisterDto): Promise<boolean> {
+    const isFirst = await this.isFirstUser()
+    if (isFirst) {
+      await this.prisma.user.create({
+        data: {
+          username: userRegister.username,
+          password: md5(userRegister.password),
+          nickname: userRegister.nickname,
+          email: userRegister.email,
+          role: Role.Admin
+        }
+      })
+      return true
+    }
+    const first = await this.findOne(userRegister.username)
+    if (first) {
+      throw new CustomException('用户已存在！')
+    } else {
+      await this.prisma.user.create({
+        data: {
+          username: userRegister.username,
+          password: md5(userRegister.password),
+          nickname: userRegister.nickname,
+          email: userRegister.email,
+          role: Role.User
+        }
+      })
+      return true
+    }
+  }
+
   async reset(userResetDto: UserResetDto): Promise<boolean> {
-    const first = await this.prisma.user.findFirst({
-      where: {
-        username: userResetDto.username
-      }
-    })
+    const first = await this.findOne(userResetDto.username)
     if (!first) {
       throw new CustomException('用户不存在！')
     } else if (first.email !== userResetDto.email) {

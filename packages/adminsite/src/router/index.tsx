@@ -16,12 +16,25 @@ const authLoader = () => {
   return null
 }
 
+const roleLoader = () => {
+  const role = useUserInfoStore.getState().profile?.role
+
+  if (role !== 'admin') {
+    return redirect('/')
+  }
+
+  return null
+}
+
 const routes: RouteObject[] = [
-  { path: '/login', element: <Login /> },
+  {
+    path: '/login',
+    element: <Login />
+  },
   {
     path: '/',
-    loader: authLoader,
     element: <BasicLayout />,
+    loader: authLoader,
     children: [
       {
         index: true,
@@ -45,7 +58,8 @@ const routes: RouteObject[] = [
       },
       {
         path: 'user',
-        element: lazyLoad(lazy(() => import('@/pages/User')))
+        element: lazyLoad(lazy(() => import('@/pages/User'))),
+        loader: roleLoader
       },
       {
         path: 'about',
