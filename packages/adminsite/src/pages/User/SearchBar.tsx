@@ -1,8 +1,13 @@
+import { UserFilters } from '@/api/user/type'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
 
 const { Option } = Select
 
-const AdvancedSearchForm = () => {
+interface SearchBarProps {
+  getUser: (params?: UserFilters) => void
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
 
@@ -13,68 +18,45 @@ const AdvancedSearchForm = () => {
     padding: 24
   }
 
+  const formItems = [
+    { name: 'username', label: 'Username' },
+    { name: 'nickname', label: 'Nickname' },
+    { name: 'email', label: 'Email' }
+  ]
+
   const getFields = () => {
     return (
       <>
-        <Col span={8}>
+        {formItems.map((formItem) => (
+          <Col span={6} key={formItem.name}>
+            <Form.Item
+              name={formItem.name}
+              label={formItem.label}
+              rules={[
+                {
+                  required: false,
+                  message: 'Input something!'
+                }
+              ]}
+            >
+              <Input placeholder="placeholder" />
+            </Form.Item>
+          </Col>
+        ))}
+        <Col span={6}>
           <Form.Item
-            name={`field`}
-            label={`Field`}
+            name="role"
+            label="Role"
             rules={[
               {
-                required: true,
-                message: 'Input something!'
-              }
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name={`field`}
-            label={`Field`}
-            rules={[
-              {
-                required: true,
-                message: 'Input something!'
-              }
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name={`field`}
-            label={`Field`}
-            rules={[
-              {
-                required: true,
-                message: 'Input something!'
-              }
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name={`field-`}
-            label={`Field`}
-            rules={[
-              {
-                required: true,
+                required: false,
                 message: 'Select something!'
               }
             ]}
-            initialValue="1"
           >
             <Select>
-              <Option value="1">
-                longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong
-              </Option>
-              <Option value="2">222</Option>
+              <Option value="admin">admin</Option>
+              <Option value="user">user</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -84,6 +66,8 @@ const AdvancedSearchForm = () => {
 
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
+    const params = values as UserFilters
+    getUser(params)
   }
 
   return (
@@ -104,14 +88,6 @@ const AdvancedSearchForm = () => {
         </Space>
       </div>
     </Form>
-  )
-}
-
-const SearchBar: React.FC = () => {
-  return (
-    <>
-      <AdvancedSearchForm />
-    </>
   )
 }
 

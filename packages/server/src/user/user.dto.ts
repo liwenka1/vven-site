@@ -16,11 +16,18 @@ export interface UserInfoDto {
   email: string
   nickname: string
   role: string
-  token: string
+  create_time: Date
 }
 
 export interface UserResetDto {
   username: string
   password: string
   email: string
+}
+
+export interface UserFilters {
+  username?: string
+  nickname?: string
+  email?: string
+  role?: string
 }

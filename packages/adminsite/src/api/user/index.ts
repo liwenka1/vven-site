@@ -1,5 +1,5 @@
 import { http } from '@/utils/request'
-import { LoginParams, RegisterParams, ResetParams, Profile } from './type'
+import { LoginParams, RegisterParams, ResetParams, Profile, UserFilters, UserInfo } from './type'
 import { ResponseData } from '@/type'
 
 export const userApi = {
@@ -15,7 +15,7 @@ export const userApi = {
   profile: () => {
     return http.get<ResponseData<Profile>>('user/profile')
   },
-  all: () => {
-    return http.post<ResponseData<Profile>>('user/all')
+  getUser: (params?: UserFilters) => {
+    return http.post<ResponseData<UserInfo[]>>('user', params)
   }
 }

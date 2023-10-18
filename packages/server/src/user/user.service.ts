@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
-import { UserRegisterDto, UserLoginDto, UserResetDto } from './user.dto'
+import { UserRegisterDto, UserLoginDto, UserResetDto, UserFilters, UserInfoDto } from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
@@ -26,8 +26,19 @@ export class UserService {
     })
   }
 
-  findMany(): Promise<User[] | undefined> {
-    return this.prisma.user.findMany()
+  async findMany(filters: UserFilters): Promise<UserInfoDto[] | undefined> {
+    const users = await this.prisma.user.findMany({
+      where: filters,
+      select: {
+        avatar_url: true,
+        username: true,
+        email: true,
+        nickname: true,
+        role: true,
+        create_time: true
+      }
+    })
+    return users
   }
 
   async login(userLogin: UserLoginDto): Promise<string> {

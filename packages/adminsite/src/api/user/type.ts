@@ -25,3 +25,19 @@ export interface Profile {
   iat: number
   exp: number
 }
+
+export interface UserFilters {
+  username?: string
+  nickname?: string
+  email?: string
+  role?: string
+}
+
+export interface UserInfo {
+  avatar_url: string
+  username: string
+  email: string
+  nickname: string
+  role: string
+	create_time: Date
+}
