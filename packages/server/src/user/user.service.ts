@@ -18,12 +18,16 @@ export class UserService {
     private readonly jwt: JwtService
   ) {}
 
-  findOne(username: string): Promise<User | undefined> {
+  findFirst(username: string): Promise<User | undefined> {
     return this.prisma.user.findFirst({
       where: {
         username: username
       }
     })
+  }
+
+  findMany(): Promise<User[] | undefined> {
+    return this.prisma.user.findMany()
   }
 
   async login(userLogin: UserLoginDto): Promise<string> {
@@ -50,7 +54,7 @@ export class UserService {
       })
       return true
     }
-    const first = await this.findOne(userRegister.username)
+    const first = await this.findFirst(userRegister.username)
     if (first) {
       throw new CustomException('用户已存在！')
     } else {
@@ -68,7 +72,7 @@ export class UserService {
   }
 
   async reset(userResetDto: UserResetDto): Promise<boolean> {
-    const first = await this.findOne(userResetDto.username)
+    const first = await this.findFirst(userResetDto.username)
     if (!first) {
       throw new CustomException('用户不存在！')
     } else if (first.email !== userResetDto.email) {

@@ -39,7 +39,7 @@ const BasicSider = () => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       <Menu onClick={handleMenuClick} selectedKeys={[pathname]} mode="inline" theme="light" items={items} />
     </div>
   )
