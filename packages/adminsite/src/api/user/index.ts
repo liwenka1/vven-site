@@ -14,5 +14,8 @@ export const userApi = {
   },
   profile: () => {
     return http.get<ResponseData<Profile>>('user/profile')
+  },
+  all: () => {
+    return http.post<ResponseData<Profile>>('user/all')
   }
 }

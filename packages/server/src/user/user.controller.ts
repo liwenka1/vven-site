@@ -3,6 +3,7 @@ import { UserService } from './user.service'
 import { UserRegisterDto, UserResetDto } from './user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/common/metadata/public.metadata'
+import { User } from '@prisma/client'
 
 @Controller('user')
 export class UserController {
@@ -30,5 +31,10 @@ export class UserController {
   @Post('reset')
   reset(@Body() userResetDto: UserResetDto): Promise<boolean> {
     return this.userService.reset(userResetDto)
+  }
+
+  @Post('all')
+  getUser(): Promise<User[]> {
+    return this.userService.findMany()
   }
 }
