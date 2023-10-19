@@ -31,3 +31,12 @@ export interface UserFilters {
   email?: string
   role?: string
 }
+
+export interface UserCreateDto {
+  avatar_url?: string
+  username?: string
+  password?: string
+  email?: string
+  nickname?: string
+  role?: string
+}

@@ -1,5 +1,7 @@
 import { UserFilters } from '@/api/user/type'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
+import { useState } from 'react'
+import CreateModal from './CreateModal'
 
 const { Option } = Select
 
@@ -39,7 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
                 }
               ]}
             >
-              <Input placeholder="placeholder" />
+              <Input placeholder="placeholder" allowClear />
             </Form.Item>
           </Col>
         ))}
@@ -54,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
               }
             ]}
           >
-            <Select>
+            <Select allowClear>
               <Option value="admin">admin</Option>
               <Option value="user">user</Option>
             </Select>
@@ -67,27 +69,44 @@ const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
     const params = values as UserFilters
+    for (const key in params) {
+      if (params[key as keyof UserFilters] === '') {
+        delete params[key as keyof UserFilters]
+      }
+    }
     getUser(params)
   }
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
   return (
-    <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
-      <Row gutter={24}>{getFields()}</Row>
-      <div style={{ textAlign: 'right' }}>
-        <Space size="small">
-          <Button type="primary" htmlType="submit">
-            Search
+    <>
+      <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
+        <Row gutter={24}>{getFields()}</Row>
+        <div style={{ textAlign: 'right' }}>
+          <Button type="primary" className="float-left" onClick={showModal}>
+            add
           </Button>
-          <Button
-            onClick={() => {
-              form.resetFields()
-            }}
-          >
-            Clear
-          </Button>
-        </Space>
-      </div>
-    </Form>
+          <Space size="small">
+            <Button type="primary" htmlType="submit">
+              Search
+            </Button>
+            <Button
+              onClick={() => {
+                form.resetFields()
+              }}
+            >
+              Clear
+            </Button>
+          </Space>
+        </div>
+      </Form>
+      <CreateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+    </>
   )
 }
 

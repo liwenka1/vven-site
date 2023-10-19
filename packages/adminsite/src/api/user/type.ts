@@ -41,3 +41,12 @@ export interface UserInfo {
   role: string
 	create_time: Date
 }
+
+export interface UserCreateParams {
+  avatar_url?: string
+  username?: string
+  password?: string
+  email?: string
+  nickname?: string
+  role?: string
+}

@@ -1,5 +1,5 @@
 import { http } from '@/utils/request'
-import { LoginParams, RegisterParams, ResetParams, Profile, UserFilters, UserInfo } from './type'
+import { LoginParams, RegisterParams, ResetParams, Profile, UserFilters, UserInfo, UserCreateParams } from './type'
 import { ResponseData } from '@/type'
 
 export const userApi = {
@@ -17,5 +17,8 @@ export const userApi = {
   },
   getUser: (params?: UserFilters) => {
     return http.post<ResponseData<UserInfo[]>>('user', params)
+  },
+  create: (params?: UserCreateParams) => {
+    return http.post<ResponseData<void>>('user/create', params)
   }
 }
