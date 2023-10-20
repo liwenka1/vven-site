@@ -15,8 +15,8 @@ export const userApi = {
   profile: () => {
     return http.get<ResponseData<Profile>>('user/profile')
   },
-  getUser: (params?: UserFilters) => {
-    return http.post<ResponseData<UserInfo[]>>('user', params)
+  select: (params?: UserFilters) => {
+    return http.post<ResponseData<UserInfo[]>>('user/select', params)
   },
   create: (params?: UserCreateParams) => {
     return http.post<ResponseData<void>>('user/create', params)

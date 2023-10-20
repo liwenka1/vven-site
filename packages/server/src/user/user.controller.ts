@@ -16,7 +16,7 @@ export class UserController {
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
+  profile(@Request() req) {
     return req.user
   }
 
@@ -32,7 +32,7 @@ export class UserController {
     return this.userService.reset(userResetDto)
   }
 
-  @Post()
+  @Post('select')
   select(@Body() filters: UserFilters): Promise<UserInfoDto[] | null> {
     return this.userService.findMany(filters)
   }

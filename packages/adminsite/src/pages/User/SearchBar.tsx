@@ -6,10 +6,10 @@ import CreateModal from './CreateModal'
 const { Option } = Select
 
 interface SearchBarProps {
-  getUser: (params?: UserFilters) => void
+  select: (params?: UserFilters) => void
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
 
@@ -74,7 +74,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ getUser }) => {
         delete params[key as keyof UserFilters]
       }
     }
-    getUser(params)
+    select(params)
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)

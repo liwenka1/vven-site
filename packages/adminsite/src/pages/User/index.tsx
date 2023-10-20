@@ -6,18 +6,18 @@ import { UserFilters, UserInfo } from '@/api/user/type'
 
 const User = () => {
   useEffect(() => {
-    getUser()
+    select()
   }, [])
 
   const [users, setUsers] = useState<UserInfo[]>([])
-  const getUser = async (params?: UserFilters) => {
-    const res = await userApi.getUser(params)
+  const select = async (params?: UserFilters) => {
+    const res = await userApi.select(params)
     setUsers(res.data)
   }
 
   return (
     <>
-      <SearchBar getUser={getUser} />
+      <SearchBar select={select} />
       <TableBar users={users} />
     </>
   )
