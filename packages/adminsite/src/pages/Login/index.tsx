@@ -1,9 +1,10 @@
 import { userApi } from '@/api/user'
 import { LoginParams, RegisterParams, ResetParams } from '@/api/user/type'
+import useMessageApi from '@/hooks/useMessageApi '
 import useUserInfoStore from '@/stores/userInfo'
 import { ResponseData } from '@/type'
 import { LockOutlined, MailOutlined, RedditOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message } from 'antd'
+import { Button, Form, Input } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -79,19 +80,7 @@ const Login = () => {
     }
   }, [variant])
 
-  const [messageApi, contextHolder] = message.useMessage()
-  const warning = (content: string) => {
-    messageApi.open({
-      type: 'warning',
-      content: content
-    })
-  }
-  const success = (content: string) => {
-    messageApi.open({
-      type: 'success',
-      content: content
-    })
-  }
+  const { contextHolder, warning, success } = useMessageApi()
 
   const buttonTexts = {
     LOGIN: 'Sign in',

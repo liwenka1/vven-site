@@ -34,12 +34,13 @@ export interface UserFilters {
 }
 
 export interface UserInfo {
+  id: number
   avatar_url: string
   username: string
   email: string
   nickname: string
   role: string
-	create_time: Date
+  create_time: Date
 }
 
 export interface UserCreateParams {

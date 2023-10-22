@@ -20,5 +20,11 @@ export const userApi = {
   },
   create: (params?: UserCreateParams) => {
     return http.post<ResponseData<void>>('user/create', params)
+  },
+  delete: (params?: UserFilters & { id: number }) => {
+    return http.post<ResponseData<void>>('user/delete', params)
+  },
+  update: (params?: UserFilters & { id: number }) => {
+    return http.post<ResponseData<void>>('user/update', params)
   }
 }

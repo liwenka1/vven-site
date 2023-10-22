@@ -11,6 +11,7 @@ export interface UserLoginDto {
 }
 
 export interface UserInfoDto {
+  id: number
   avatar_url: string
   username: string
   email: string
@@ -27,6 +28,7 @@ export interface UserResetDto {
 
 export interface UserFilters {
   username?: string
+  password?: string
   nickname?: string
   email?: string
   role?: string

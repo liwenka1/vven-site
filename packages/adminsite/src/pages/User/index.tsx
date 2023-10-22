@@ -18,7 +18,7 @@ const User = () => {
   return (
     <>
       <SearchBar select={select} />
-      <TableBar users={users} />
+      <TableBar users={users} select={select} />
     </>
   )
 }

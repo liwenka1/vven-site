@@ -33,12 +33,22 @@ export class UserController {
   }
 
   @Post('select')
-  select(@Body() filters: UserFilters): Promise<UserInfoDto[] | null> {
+  select(@Body() filters: UserFilters): Promise<UserInfoDto[]> {
     return this.userService.findMany(filters)
   }
 
   @Post('create')
   create(@Body() userCreateDto: UserCreateDto): Promise<void> {
     return this.userService.create(userCreateDto)
+  }
+
+  @Post('delete')
+  delete(@Body() filters: UserFilters & { id: number }): Promise<void> {
+    return this.userService.delete(filters)
+  }
+
+  @Post('update')
+  update(@Body() filters: UserFilters & { id: number }): Promise<void> {
+    return this.userService.update(filters)
   }
 }

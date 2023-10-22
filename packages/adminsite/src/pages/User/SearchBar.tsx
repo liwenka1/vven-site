@@ -105,7 +105,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
           </Space>
         </div>
       </Form>
-      <CreateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <CreateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} select={select} type="CREATE" />
     </>
   )
 }

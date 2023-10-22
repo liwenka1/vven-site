@@ -26,10 +26,11 @@ export class UserService {
     })
   }
 
-  async findMany(filters: UserFilters): Promise<UserInfoDto[] | null> {
+  async findMany(filters: UserFilters): Promise<UserInfoDto[]> {
     const users = await this.prisma.user.findMany({
       where: filters,
       select: {
+        id: true,
         avatar_url: true,
         username: true,
         email: true,
@@ -42,9 +43,33 @@ export class UserService {
   }
 
   async create(userCreateDto: UserCreateDto): Promise<void> {
-    userCreateDto.password = md5(userCreateDto.password)
-    await this.prisma.user.create({
-      data: userCreateDto
+    const first = await this.findFirst(userCreateDto.username)
+    if (first) {
+      throw new CustomException('用户已存在！')
+    } else {
+      userCreateDto.password = md5(userCreateDto.password)
+      await this.prisma.user.create({
+        data: userCreateDto
+      })
+    }
+  }
+
+  async delete(filters: UserFilters & { id: number }): Promise<void> {
+    await this.prisma.user.delete({
+      where: filters
+    })
+  }
+
+  async update(filters: UserFilters & { id: number }): Promise<void> {
+    if (filters.password) {
+      filters.password = md5(filters.password)
+    }
+    const { id, ...data } = filters
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: data
     })
   }
 
@@ -68,10 +93,6 @@ export class UserService {
         email: userRegister.email,
         role: Role.Admin
       })
-    }
-    const first = await this.findFirst(userRegister.username)
-    if (first) {
-      throw new CustomException('用户已存在！')
     } else {
       await this.create({
         username: userRegister.username,
