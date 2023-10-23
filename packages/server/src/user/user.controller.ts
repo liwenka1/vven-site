@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service'
-import { UserCreateDto, UserFilters, UserInfoDto, UserRegisterDto, UserResetDto } from './user.dto'
+import { UserFilters, UserWithoutPassword } from './user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/common/metadata/public.metadata'
 
@@ -22,24 +22,24 @@ export class UserController {
 
   @Public()
   @Post('register')
-  register(@Body() userRegister: UserRegisterDto): Promise<void> {
-    return this.userService.register(userRegister)
+  register(@Body() filters: UserFilters): Promise<void> {
+    return this.userService.register(filters)
   }
 
   @Public()
   @Post('reset')
-  reset(@Body() userResetDto: UserResetDto): Promise<void> {
-    return this.userService.reset(userResetDto)
+  reset(@Body() filters: UserFilters): Promise<void> {
+    return this.userService.reset(filters)
   }
 
   @Post('select')
-  select(@Body() filters: UserFilters): Promise<UserInfoDto[]> {
+  select(@Body() filters: UserFilters): Promise<UserWithoutPassword[]> {
     return this.userService.findMany(filters)
   }
 
   @Post('create')
-  create(@Body() userCreateDto: UserCreateDto): Promise<void> {
-    return this.userService.create(userCreateDto)
+  create(@Body() filters: UserFilters): Promise<void> {
+    return this.userService.create(filters)
   }
 
   @Post('delete')

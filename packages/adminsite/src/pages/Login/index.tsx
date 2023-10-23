@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { LoginParams, RegisterParams, ResetParams } from '@/api/user/type'
+import { UserParams } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import useUserInfoStore from '@/stores/userInfo'
 import { ResponseData } from '@/type'
@@ -25,23 +25,23 @@ const Login = () => {
     try {
       setFormDisabled(true)
       if (variant === 'REGISTER') {
-        const registerParams: RegisterParams = values as RegisterParams
+        const registerParams: UserParams = values as UserParams
         await userApi.register(registerParams)
-        const loginParams: LoginParams = {
+        const loginParams: UserParams = {
           username: registerParams.username,
           password: registerParams.password
         }
         login(loginParams)
       } else if (variant === 'RESET') {
-        const resetParams: ResetParams = values as ResetParams
+        const resetParams: UserParams = values as UserParams
         await userApi.reset(resetParams)
-        const loginParams: LoginParams = {
+        const loginParams: UserParams = {
           username: resetParams.username,
           password: resetParams.password
         }
         login(loginParams)
       } else if (variant === 'LOGIN') {
-        login(values as LoginParams)
+        login(values as UserParams)
       }
     } catch (error) {
       const customError = error as ResponseData<unknown>
@@ -50,7 +50,7 @@ const Login = () => {
       setFormDisabled(false)
     }
   }
-  const login = async (loginParams: LoginParams) => {
+  const login = async (loginParams: UserParams) => {
     try {
       const token = await userApi.login(loginParams)
       setToken(token.data)

@@ -1,30 +1,30 @@
 import { http } from '@/utils/request'
-import { LoginParams, RegisterParams, ResetParams, Profile, UserFilters, UserInfo, UserCreateParams } from './type'
+import { UserParams, UserInfo } from './type'
 import { ResponseData } from '@/type'
 
 export const userApi = {
-  register: (params: RegisterParams) => {
+  register: (params: UserParams) => {
     return http.post('/user/register', params)
   },
-  login: (params: LoginParams) => {
+  login: (params: UserParams) => {
     return http.post<ResponseData<string>>('/user/login', params)
   },
-  reset: (params: ResetParams) => {
+  reset: (params: UserParams) => {
     return http.post('/user/reset', params)
   },
   profile: () => {
-    return http.get<ResponseData<Profile>>('user/profile')
+    return http.get<ResponseData<UserInfo>>('user/profile')
   },
-  select: (params?: UserFilters) => {
+  select: (params?: UserParams) => {
     return http.post<ResponseData<UserInfo[]>>('user/select', params)
   },
-  create: (params?: UserCreateParams) => {
+  create: (params: UserParams) => {
     return http.post<ResponseData<void>>('user/create', params)
   },
-  delete: (params?: UserFilters & { id: number }) => {
+  delete: (params: UserParams & { id: number }) => {
     return http.post<ResponseData<void>>('user/delete', params)
   },
-  update: (params?: UserFilters & { id: number }) => {
+  update: (params: UserParams & { id: number }) => {
     return http.post<ResponseData<void>>('user/update', params)
   }
 }

@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { UserCreateParams, UserFilters, UserInfo } from '@/api/user/type'
+import { UserParams, UserInfo } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
@@ -38,11 +38,11 @@ const CreateModal: React.FC<CreateModalProps> = ({ isModalOpen, setIsModalOpen, 
     console.log(values)
     try {
       if (type === 'CREATE') {
-        const params = values as UserCreateParams
+        const params = values as UserParams
         await userApi.create(params)
         success('添加用户成功！')
       } else if (type === 'UPDATE') {
-        const params = values as UserFilters
+        const params = values as UserParams
         if (initialValues) {
           await userApi.update({ id: initialValues.id, ...params })
           success('修改用户成功！')

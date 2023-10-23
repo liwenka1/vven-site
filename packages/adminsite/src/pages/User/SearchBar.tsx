@@ -1,4 +1,4 @@
-import { UserFilters } from '@/api/user/type'
+import { UserParams } from '@/api/user/type'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
 import { useState } from 'react'
 import CreateModal from './CreateModal'
@@ -6,7 +6,7 @@ import CreateModal from './CreateModal'
 const { Option } = Select
 
 interface SearchBarProps {
-  select: (params?: UserFilters) => void
+  select: (params?: UserParams) => void
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
@@ -68,10 +68,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
 
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
-    const params = values as UserFilters
+    const params = values as UserParams
     for (const key in params) {
-      if (params[key as keyof UserFilters] === '') {
-        delete params[key as keyof UserFilters]
+      if (params[key as keyof UserParams] === '') {
+        delete params[key as keyof UserParams]
       }
     }
     select(params)

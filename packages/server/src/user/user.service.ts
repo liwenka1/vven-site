@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
-import { UserRegisterDto, UserLoginDto, UserResetDto, UserFilters, UserInfoDto, UserCreateDto } from './user.dto'
+import { UserFilters, UserWithoutPassword } from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
@@ -26,7 +26,7 @@ export class UserService {
     })
   }
 
-  async findMany(filters: UserFilters): Promise<UserInfoDto[]> {
+  async findMany(filters: UserFilters): Promise<UserWithoutPassword[]> {
     const users = await this.prisma.user.findMany({
       where: filters,
       select: {
@@ -42,7 +42,7 @@ export class UserService {
     return users
   }
 
-  async create(userCreateDto: UserCreateDto): Promise<void> {
+  async create(userCreateDto: UserFilters): Promise<void> {
     const first = await this.findFirst(userCreateDto.username)
     if (first) {
       throw new CustomException('用户已存在！')
@@ -73,7 +73,7 @@ export class UserService {
     })
   }
 
-  async login(userLogin: UserLoginDto): Promise<string> {
+  async login(userLogin: UserFilters): Promise<string> {
     const token = this.jwt.sign(userLogin)
     return token
   }
@@ -83,7 +83,7 @@ export class UserService {
     return count === 0
   }
 
-  async register(userRegister: UserRegisterDto): Promise<void> {
+  async register(userRegister: UserFilters): Promise<void> {
     const isFirst = await this.isFirstUser()
     if (isFirst) {
       await this.create({
@@ -104,7 +104,7 @@ export class UserService {
     }
   }
 
-  async reset(userResetDto: UserResetDto): Promise<void> {
+  async reset(userResetDto: UserFilters): Promise<void> {
     const first = await this.findFirst(userResetDto.username)
     if (!first) {
       throw new CustomException('用户不存在！')
