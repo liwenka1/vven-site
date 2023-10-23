@@ -10,13 +10,13 @@ export const userApi = {
     return http.post<ResponseData<string>>('/user/login', params)
   },
   reset: (params: UserParams) => {
-    return http.post('/user/reset', params)
+    return http.post<ResponseData<void>>('/user/reset', params)
   },
   profile: () => {
     return http.get<ResponseData<UserInfo>>('user/profile')
   },
-  select: (params?: UserParams) => {
-    return http.post<ResponseData<UserInfo[]>>('user/select', params)
+  search: (params?: UserParams & { orderBy?: 'asc' | 'desc' }) => {
+    return http.post<ResponseData<UserInfo[]>>('user/search', params)
   },
   create: (params: UserParams) => {
     return http.post<ResponseData<void>>('user/create', params)

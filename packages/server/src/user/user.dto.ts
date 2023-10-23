@@ -8,5 +8,5 @@ export interface UserFilters {
   password?: string
   nickname?: string
   email?: string
-  role?: string
+  role?: 'admin' | 'user'
 }

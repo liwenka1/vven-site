@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
 import { Button, Popconfirm, Space, Table, Tag } from 'antd'
-import { UserInfo } from '@/api/user/type'
+import type { TableProps } from 'antd/es/table'
+import { UserInfo, UserParams } from '@/api/user/type'
 import { userApi } from '@/api/user'
-import CreateModal from './CreateModal'
+import UserModal from './UserModal'
 
 const { Column } = Table
 
 interface TableBarProps {
   users: UserInfo[]
-  select: () => void
+  search: () => void
+  searchParams: UserParams & { orderBy?: 'asc' | 'desc' }
+  setSearchParams: React.Dispatch<React.SetStateAction<TableBarProps['searchParams']>>
 }
 
-const TableBar: React.FC<TableBarProps> = ({ users, select }) => {
+const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSearchParams }) => {
   const confirm = async (user: UserInfo) => {
     await userApi.delete(user)
-    select()
+    search()
   }
 
   const cancel = () => {
@@ -30,13 +33,27 @@ const TableBar: React.FC<TableBarProps> = ({ users, select }) => {
     setIsModalOpen(true)
   }
 
+  const onChange: TableProps<UserInfo>['onChange'] = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra)
+    if (!Array.isArray(sorter)) {
+      if (sorter.order === 'descend') {
+        setSearchParams({ ...searchParams, orderBy: 'desc' })
+      } else if (sorter.order === 'ascend') {
+        setSearchParams({ ...searchParams, orderBy: 'asc' })
+      } else {
+        setSearchParams({ ...searchParams, orderBy: undefined })
+      }
+      search()
+    }
+  }
+
   return (
     <>
-      <Table dataSource={users} rowKey="id">
+      <Table dataSource={users} rowKey="id" onChange={onChange}>
         <Column title="Username" dataIndex="username" key="username" />
         <Column title="Email" dataIndex="email" key="email" />
         <Column title="Nickname" dataIndex="nickname" key="nickname" />
-        <Column title="Create Time" dataIndex="create_time" key="create_time" />
+        <Column title="Create Time" dataIndex="create_time" key="create_time" sorter />
         <Column title="Role" dataIndex="role" key="role" render={(role) => <Tag color="blue">{role}</Tag>} />
         <Column
           title="Action"
@@ -63,10 +80,10 @@ const TableBar: React.FC<TableBarProps> = ({ users, select }) => {
           )}
         />
       </Table>
-      <CreateModal
+      <UserModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        select={select}
+        search={search}
         initialValues={initialValues}
         type="UPDATE"
       />

@@ -32,8 +32,8 @@ export class UserController {
     return this.userService.reset(filters)
   }
 
-  @Post('select')
-  select(@Body() filters: UserFilters): Promise<UserWithoutPassword[]> {
+  @Post('search')
+  search(@Body() filters: UserFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
     return this.userService.findMany(filters)
   }
 

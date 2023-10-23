@@ -5,7 +5,6 @@ import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
 import { User } from '@prisma/client'
-import { Role } from '@/common/enums/role.enum'
 
 const md5 = (s: string) => {
   return crypto.createHash('md5').update(s).digest('hex')
@@ -18,17 +17,16 @@ export class UserService {
     private readonly jwt: JwtService
   ) {}
 
-  findFirst(username: string): Promise<User | null> {
+  findFirst(filters: UserFilters): Promise<User | null> {
     return this.prisma.user.findFirst({
-      where: {
-        username: username
-      }
+      where: filters
     })
   }
 
-  async findMany(filters: UserFilters): Promise<UserWithoutPassword[]> {
+  async findMany(filters: UserFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
+    const { orderBy, ...where } = filters
     const users = await this.prisma.user.findMany({
-      where: filters,
+      where: where,
       select: {
         id: true,
         avatar_url: true,
@@ -37,19 +35,26 @@ export class UserService {
         nickname: true,
         role: true,
         create_time: true
+      },
+      orderBy: {
+        create_time: orderBy
       }
     })
-    return users
+    if (orderBy) {
+      return users
+    } else {
+      return users.sort((a, b) => (a.role === 'admin' ? -1 : b.role === 'admin' ? 1 : 0))
+    }
   }
 
-  async create(userCreateDto: UserFilters): Promise<void> {
-    const first = await this.findFirst(userCreateDto.username)
+  async create(filters: UserFilters): Promise<void> {
+    const first = await this.findFirst({ username: filters.username })
     if (first) {
       throw new CustomException('用户已存在！')
     } else {
-      userCreateDto.password = md5(userCreateDto.password)
+      filters.password = md5(filters.password)
       await this.prisma.user.create({
-        data: userCreateDto
+        data: filters
       })
     }
   }
@@ -73,8 +78,8 @@ export class UserService {
     })
   }
 
-  async login(userLogin: UserFilters): Promise<string> {
-    const token = this.jwt.sign(userLogin)
+  async login(filters: UserFilters): Promise<string> {
+    const token = this.jwt.sign(filters)
     return token
   }
 
@@ -83,44 +88,30 @@ export class UserService {
     return count === 0
   }
 
-  async register(userRegister: UserFilters): Promise<void> {
+  async register(filters: UserFilters): Promise<void> {
     const isFirst = await this.isFirstUser()
     if (isFirst) {
       await this.create({
-        username: userRegister.username,
-        password: md5(userRegister.password),
-        nickname: userRegister.nickname,
-        email: userRegister.email,
-        role: Role.Admin
+        ...filters,
+        role: 'admin'
       })
     } else {
       await this.create({
-        username: userRegister.username,
-        password: md5(userRegister.password),
-        nickname: userRegister.nickname,
-        email: userRegister.email,
-        role: Role.User
+        ...filters,
+        role: 'user'
       })
     }
   }
 
-  async reset(userResetDto: UserFilters): Promise<void> {
-    const first = await this.findFirst(userResetDto.username)
+  async reset(filters: UserFilters): Promise<void> {
+    const first = await this.findFirst({ username: filters.username })
     if (!first) {
       throw new CustomException('用户不存在！')
-    } else if (first.email !== userResetDto.email) {
+    } else if (first.email !== filters.email) {
       throw new CustomException('邮箱错误！')
     } else {
-      await this.prisma.user.update({
-        where: {
-          id: first.id
-        },
-        data: {
-          username: userResetDto.username,
-          password: md5(userResetDto.password),
-          email: userResetDto.email
-        }
-      })
+      filters.password = md5(filters.password)
+      await this.update({ id: first.id, ...filters })
     }
   }
 }

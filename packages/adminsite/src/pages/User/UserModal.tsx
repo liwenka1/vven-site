@@ -3,11 +3,12 @@ import { UserParams, UserInfo } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
+import UserUploadFile from './UserUploadFile'
 
-interface CreateModalProps {
+interface UserModalProps {
   isModalOpen: boolean
-  setIsModalOpen: (isModalOpen: CreateModalProps['isModalOpen']) => void
-  select: () => void
+  setIsModalOpen: React.Dispatch<React.SetStateAction<UserModalProps['isModalOpen']>>
+  search: () => void
   initialValues?: UserInfo
   type: 'UPDATE' | 'CREATE'
 }
@@ -23,7 +24,7 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 }
 }
 
-const CreateModal: React.FC<CreateModalProps> = ({ isModalOpen, setIsModalOpen, select, initialValues, type }) => {
+const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, search, initialValues, type }) => {
   const handleOk = () => {
     setIsModalOpen(false)
   }
@@ -49,7 +50,7 @@ const CreateModal: React.FC<CreateModalProps> = ({ isModalOpen, setIsModalOpen, 
         }
       }
       setIsModalOpen(false)
-      select()
+      search()
     } catch (error) {
       const customError = error as ResponseData<unknown>
       warning(customError.message)
@@ -80,6 +81,9 @@ const CreateModal: React.FC<CreateModalProps> = ({ isModalOpen, setIsModalOpen, 
           style={{ maxWidth: 600 }}
           initialValues={initialValues}
         >
+          <Form.Item>
+            <UserUploadFile />
+          </Form.Item>
           {formItems.map((formItem) => (
             <Form.Item key={formItem.name} name={formItem.name} label={formItem.label} rules={[{ required: true }]}>
               <Input placeholder="placeholder" allowClear />
@@ -116,4 +120,4 @@ const CreateModal: React.FC<CreateModalProps> = ({ isModalOpen, setIsModalOpen, 
   )
 }
 
-export default CreateModal
+export default UserModal

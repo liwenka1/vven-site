@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UserService } from '@/user/user.service'
-import { UserLoginDto } from '@/user/user.dto'
+import { UserFilters, UserWithoutPassword } from '@/user/user.dto'
 import { CustomException } from '@/common/exceptions/custom.business'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
@@ -16,11 +16,11 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(userLogin: UserLoginDto): Promise<any> {
-    const user = await this.userService.findOne(userLogin.username)
+  async validateUser(filters: UserFilters): Promise<UserWithoutPassword | null> {
+    const user = await this.userService.findFirst({ username: filters.username })
     if (user) {
       const { password, ...result } = user
-      if (password !== md5(userLogin.password)) {
+      if (password !== md5(filters.password)) {
         throw new CustomException('用户密码错误！')
       }
       return result
@@ -28,8 +28,8 @@ export class AuthService {
     return null
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId }
+  async login(user: UserWithoutPassword) {
+    const payload = { username: user.username, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload)
     }

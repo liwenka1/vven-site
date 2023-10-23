@@ -1,15 +1,17 @@
 import { UserParams } from '@/api/user/type'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
 import { useState } from 'react'
-import CreateModal from './CreateModal'
+import UserModal from './UserModal'
 
 const { Option } = Select
 
 interface SearchBarProps {
-  select: (params?: UserParams) => void
+  search: () => void
+  searchParams: UserParams & { orderBy?: 'asc' | 'desc' }
+  setSearchParams: React.Dispatch<React.SetStateAction<SearchBarProps['searchParams']>>
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ search, searchParams, setSearchParams }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
 
@@ -69,12 +71,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
     const params = values as UserParams
-    for (const key in params) {
-      if (params[key as keyof UserParams] === '') {
-        delete params[key as keyof UserParams]
-      }
-    }
-    select(params)
+    setSearchParams({ ...searchParams, ...params })
+    search()
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -105,7 +103,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ select }) => {
           </Space>
         </div>
       </Form>
-      <CreateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} select={select} type="CREATE" />
+      <UserModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} search={search} type="CREATE" />
     </>
   )
 }
