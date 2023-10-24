@@ -1,6 +1,12 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service'
-import { UserFilters, UserWithoutPassword } from './user.dto'
+import {
+  UserCreateOrUpdateFilters,
+  UserRegisterParams,
+  UserResetParams,
+  UserSearchFilters,
+  UserWithoutPassword
+} from './user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/common/metadata/public.metadata'
 
@@ -22,33 +28,33 @@ export class UserController {
 
   @Public()
   @Post('register')
-  register(@Body() filters: UserFilters): Promise<void> {
-    return this.userService.register(filters)
+  register(@Body() params: UserRegisterParams): Promise<void> {
+    return this.userService.register(params)
   }
 
   @Public()
   @Post('reset')
-  reset(@Body() filters: UserFilters): Promise<void> {
-    return this.userService.reset(filters)
+  reset(@Body() params: UserResetParams): Promise<void> {
+    return this.userService.reset(params)
   }
 
   @Post('search')
-  search(@Body() filters: UserFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
-    return this.userService.findMany(filters)
+  search(@Body() params: UserSearchFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
+    return this.userService.findMany(params)
   }
 
   @Post('create')
-  create(@Body() filters: UserFilters): Promise<void> {
-    return this.userService.create(filters)
+  create(@Body() params: UserCreateOrUpdateFilters): Promise<void> {
+    return this.userService.create(params)
   }
 
   @Post('delete')
-  delete(@Body() filters: UserFilters & { id: number }): Promise<void> {
-    return this.userService.delete(filters)
+  delete(@Body() params: { id: number }): Promise<void> {
+    return this.userService.delete(params)
   }
 
   @Post('update')
-  update(@Body() filters: UserFilters & { id: number }): Promise<void> {
-    return this.userService.update(filters)
+  update(@Body() params: UserCreateOrUpdateFilters & { id: number }): Promise<void> {
+    return this.userService.update(params)
   }
 }

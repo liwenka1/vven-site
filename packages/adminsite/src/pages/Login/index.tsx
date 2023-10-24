@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { UserParams } from '@/api/user/type'
+import { UserLoginParams, UserRegisterParams, UserResetParams } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import useUserInfoStore from '@/stores/userInfo'
 import { ResponseData } from '@/type'
@@ -25,32 +25,32 @@ const Login = () => {
     try {
       setFormDisabled(true)
       if (variant === 'REGISTER') {
-        const registerParams: UserParams = values as UserParams
+        const registerParams: UserRegisterParams = values as UserRegisterParams
         await userApi.register(registerParams)
-        const loginParams: UserParams = {
+        const loginParams: UserLoginParams = {
           username: registerParams.username,
           password: registerParams.password
         }
         login(loginParams)
       } else if (variant === 'RESET') {
-        const resetParams: UserParams = values as UserParams
+        const resetParams: UserResetParams = values as UserResetParams
         await userApi.reset(resetParams)
-        const loginParams: UserParams = {
+        const loginParams: UserLoginParams = {
           username: resetParams.username,
           password: resetParams.password
         }
         login(loginParams)
       } else if (variant === 'LOGIN') {
-        login(values as UserParams)
+        login(values as UserLoginParams)
       }
     } catch (error) {
-      const customError = error as ResponseData<unknown>
+      const customError = error as ResponseData<null>
       warning(customError.message)
     } finally {
       setFormDisabled(false)
     }
   }
-  const login = async (loginParams: UserParams) => {
+  const login = async (loginParams: UserLoginParams) => {
     try {
       const token = await userApi.login(loginParams)
       setToken(token.data)
@@ -59,7 +59,7 @@ const Login = () => {
       navigate('/')
       success('登录成功！')
     } catch (error) {
-      const customError = error as ResponseData<unknown>
+      const customError = error as ResponseData<null>
       warning(customError.message)
     }
   }

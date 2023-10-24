@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import SearchBar from './SearchBar'
 import TableBar from './TableBar'
 import { userApi } from '@/api/user'
-import { UserParams, UserInfo } from '@/api/user/type'
+import { UserSearchFilters, UserWithoutPassword } from '@/api/user/type'
 
 const User = () => {
-  const [users, setUsers] = useState<UserInfo[]>([])
-  const [searchParams, setSearchParams] = useState<UserParams & { orderBy?: 'asc' | 'desc' }>({})
+  const [users, setUsers] = useState<UserWithoutPassword[]>([])
+  const [searchParams, setSearchParams] = useState<UserSearchFilters & { orderBy?: 'asc' | 'desc' }>({})
   const search = useCallback(async () => {
     const res = await userApi.search(searchParams)
     setUsers(res.data)

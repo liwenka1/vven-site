@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { UserParams, UserInfo } from '@/api/user/type'
+import { UserSearchFilters, UserWithoutPassword } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
@@ -9,7 +9,7 @@ interface UserModalProps {
   isModalOpen: boolean
   setIsModalOpen: React.Dispatch<React.SetStateAction<UserModalProps['isModalOpen']>>
   search: () => void
-  initialValues?: UserInfo
+  initialValues?: UserWithoutPassword
   type: 'UPDATE' | 'CREATE'
 }
 
@@ -39,11 +39,11 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
     console.log(values)
     try {
       if (type === 'CREATE') {
-        const params = values as UserParams
+        const params = values as UserSearchFilters
         await userApi.create(params)
         success('添加用户成功！')
       } else if (type === 'UPDATE') {
-        const params = values as UserParams
+        const params = values as UserSearchFilters
         if (initialValues) {
           await userApi.update({ id: initialValues.id, ...params })
           success('修改用户成功！')
@@ -52,7 +52,7 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
       setIsModalOpen(false)
       search()
     } catch (error) {
-      const customError = error as ResponseData<unknown>
+      const customError = error as ResponseData<null>
       warning(customError.message)
     }
   }

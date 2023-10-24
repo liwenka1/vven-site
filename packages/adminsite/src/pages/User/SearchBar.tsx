@@ -1,4 +1,4 @@
-import { UserParams } from '@/api/user/type'
+import { UserSearchFilters } from '@/api/user/type'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
 import { useState } from 'react'
 import UserModal from './UserModal'
@@ -7,7 +7,7 @@ const { Option } = Select
 
 interface SearchBarProps {
   search: () => void
-  searchParams: UserParams & { orderBy?: 'asc' | 'desc' }
+  searchParams: UserSearchFilters & { orderBy?: 'asc' | 'desc' }
   setSearchParams: React.Dispatch<React.SetStateAction<SearchBarProps['searchParams']>>
 }
 
@@ -70,7 +70,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ search, searchParams, setSearchPa
 
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
-    const params = values as UserParams
+    const params = values as UserSearchFilters
     setSearchParams({ ...searchParams, ...params })
     search()
   }
