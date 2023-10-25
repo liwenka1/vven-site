@@ -6,9 +6,17 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { BaseExceptionFilter } from './common/exceptions/base.exception.filter'
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter'
 import { UserModule } from './user/user.module'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public/uploaded'),
+      serveRoot: '/static'
+    })
+  ],
   controllers: [AppController],
   providers: [
     AppService,

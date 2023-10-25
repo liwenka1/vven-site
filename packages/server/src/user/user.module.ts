@@ -9,6 +9,9 @@ import { AuthService } from '@/auth/auth.service'
 import { JwtStrategy } from '@/common/strategy/jwt.strategy'
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
 import { APP_GUARD } from '@nestjs/core'
+import { MulterModule } from '@nestjs/platform-express'
+import { diskStorage } from 'multer'
+import { extname, join } from 'path'
 
 @Module({
   imports: [
@@ -18,7 +21,18 @@ import { APP_GUARD } from '@nestjs/core'
         expiresIn: '7d'
       }
     }),
-    PassportModule
+    PassportModule,
+    MulterModule.register({
+      // 用于配置上传，这部分也可以写在路由上
+      storage: diskStorage({
+        // destination: join(__dirname, '../images'),
+        destination: join('./public/uploaded'),
+        filename: (_, file, callback) => {
+          const fileName = `${new Date().getTime() + extname(file.originalname)}`
+          return callback(null, fileName)
+        }
+      })
+    })
   ],
   controllers: [UserController],
   providers: [

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { UserService } from './user.service'
 import {
   UserCreateOrUpdateFilters,
@@ -9,6 +9,7 @@ import {
 } from './user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/common/metadata/public.metadata'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('user')
 export class UserController {
@@ -56,5 +57,12 @@ export class UserController {
   @Post('update')
   update(@Body() params: UserCreateOrUpdateFilters & { id: number }): Promise<void> {
     return this.userService.update(params)
+  }
+
+  @Public()
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload')
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return file.filename
   }
 }
