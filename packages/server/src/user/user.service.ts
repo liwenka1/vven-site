@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
-import { UserFilters, UserWithoutPassword } from './user.dto'
+import {
+  UserCreateOrUpdateFilters,
+  UserDeleteFilters,
+  UserLoginParams,
+  UserRegisterParams,
+  UserResetParams,
+  UserSearchFilters,
+  UserWithoutPassword
+} from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
@@ -17,13 +25,13 @@ export class UserService {
     private readonly jwt: JwtService
   ) {}
 
-  findFirst(filters: UserFilters): Promise<User | null> {
+  findFirst(filters: UserSearchFilters): Promise<User | null> {
     return this.prisma.user.findFirst({
       where: filters
     })
   }
 
-  async findMany(filters: UserFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
+  async findMany(filters: UserSearchFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
     const { orderBy, ...where } = filters
     const users = await this.prisma.user.findMany({
       where: where,
@@ -47,7 +55,7 @@ export class UserService {
     }
   }
 
-  async create(filters: UserFilters): Promise<void> {
+  async create(filters: UserCreateOrUpdateFilters): Promise<void> {
     const first = await this.findFirst({ username: filters.username })
     if (first) {
       throw new CustomException('用户已存在！')
@@ -59,13 +67,13 @@ export class UserService {
     }
   }
 
-  async delete(filters: UserFilters & { id: number }): Promise<void> {
+  async delete(filters: UserDeleteFilters): Promise<void> {
     await this.prisma.user.delete({
       where: filters
     })
   }
 
-  async update(filters: UserFilters & { id: number }): Promise<void> {
+  async update(filters: UserCreateOrUpdateFilters & { id: number }): Promise<void> {
     if (filters.password) {
       filters.password = md5(filters.password)
     }
@@ -78,8 +86,8 @@ export class UserService {
     })
   }
 
-  async login(filters: UserFilters): Promise<string> {
-    const token = this.jwt.sign(filters)
+  async login(params: UserLoginParams): Promise<string> {
+    const token = this.jwt.sign(params)
     return token
   }
 
@@ -88,30 +96,30 @@ export class UserService {
     return count === 0
   }
 
-  async register(filters: UserFilters): Promise<void> {
+  async register(params: UserRegisterParams): Promise<void> {
     const isFirst = await this.isFirstUser()
     if (isFirst) {
       await this.create({
-        ...filters,
+        ...params,
         role: 'admin'
       })
     } else {
       await this.create({
-        ...filters,
+        ...params,
         role: 'user'
       })
     }
   }
 
-  async reset(filters: UserFilters): Promise<void> {
-    const first = await this.findFirst({ username: filters.username })
+  async reset(params: UserResetParams): Promise<void> {
+    const first = await this.findFirst({ username: params.username })
     if (!first) {
       throw new CustomException('用户不存在！')
-    } else if (first.email !== filters.email) {
+    } else if (first.email !== params.email) {
       throw new CustomException('邮箱错误！')
     } else {
-      filters.password = md5(filters.password)
-      await this.update({ id: first.id, ...filters })
+      params.password = md5(params.password)
+      await this.update({ id: first.id, ...params })
     }
   }
 }

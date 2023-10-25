@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 import { Button, Popconfirm, Space, Table, Tag } from 'antd'
 import type { TableProps } from 'antd/es/table'
-import { UserInfo, UserParams } from '@/api/user/type'
+import { UserWithoutPassword, UserSearchFilters } from '@/api/user/type'
 import { userApi } from '@/api/user'
 import UserModal from './UserModal'
 
 const { Column } = Table
 
 interface TableBarProps {
-  users: UserInfo[]
+  users: UserWithoutPassword[]
   search: () => void
-  searchParams: UserParams & { orderBy?: 'asc' | 'desc' }
+  searchParams: UserSearchFilters & { orderBy?: 'asc' | 'desc' }
   setSearchParams: React.Dispatch<React.SetStateAction<TableBarProps['searchParams']>>
 }
 
 const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSearchParams }) => {
-  const confirm = async (user: UserInfo) => {
+  const confirm = async (user: UserWithoutPassword) => {
     await userApi.delete(user)
     search()
   }
@@ -25,15 +25,15 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [initialValues, setInitialValues] = useState<UserInfo>()
-  const showModal = (user: UserInfo) => {
+  const [initialValues, setInitialValues] = useState<UserWithoutPassword>()
+  const showModal = (user: UserWithoutPassword) => {
     console.log(user, 'user')
 
     setInitialValues(user)
     setIsModalOpen(true)
   }
 
-  const onChange: TableProps<UserInfo>['onChange'] = (pagination, filters, sorter, extra) => {
+  const onChange: TableProps<UserWithoutPassword>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra)
     if (!Array.isArray(sorter)) {
       if (sorter.order === 'descend') {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UserService } from '@/user/user.service'
-import { UserFilters, UserWithoutPassword } from '@/user/user.dto'
+import { UserLoginParams, UserWithoutPassword } from '@/user/user.dto'
 import { CustomException } from '@/common/exceptions/custom.business'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
@@ -16,7 +16,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(filters: UserFilters): Promise<UserWithoutPassword | null> {
+  async validateUser(filters: UserLoginParams): Promise<UserWithoutPassword | null> {
     const user = await this.userService.findFirst({ username: filters.username })
     if (user) {
       const { password, ...result } = user
