@@ -59,10 +59,9 @@ export class UserController {
     return this.userService.update(params)
   }
 
-  @Public()
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
-  upload(@UploadedFile() file: Express.Multer.File) {
-    return file.filename
+  upload(@UploadedFile() file: Express.Multer.File, @Body('id') id?: number): Promise<string> {
+    return this.userService.upload(file, id)
   }
 }

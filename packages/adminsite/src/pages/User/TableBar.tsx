@@ -84,6 +84,7 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         search={search}
+        key={initialValues?.id}
         initialValues={initialValues}
         type="UPDATE"
       />

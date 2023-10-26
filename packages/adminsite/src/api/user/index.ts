@@ -34,5 +34,8 @@ export const userApi = {
   },
   update: (params: UserCreateOrUpdateFilters & { id: number }) => {
     return http.post<ResponseData<void>>('user/update', params)
+  },
+  upload: (formData: FormData) => {
+    return http.post<ResponseData<string>>('user/upload', formData)
   }
 }

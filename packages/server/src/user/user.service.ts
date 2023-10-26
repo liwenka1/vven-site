@@ -122,4 +122,12 @@ export class UserService {
       await this.update({ id: first.id, ...params })
     }
   }
+
+  async upload(file: Express.Multer.File, id?: number): Promise<string> {
+    const avatarUrl = `/static/${file.filename}`
+    if (id) {
+      this.update({ id: Number(id), avatar_url: avatarUrl })
+    }
+    return avatarUrl
+  }
 }

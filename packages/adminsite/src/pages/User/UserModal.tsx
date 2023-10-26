@@ -81,8 +81,8 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
           style={{ maxWidth: 600 }}
           initialValues={initialValues}
         >
-          <Form.Item>
-            <UserUploadFile />
+          <Form.Item name="upload" label="Upload">
+            <UserUploadFile id={initialValues?.id} avatarUrl={initialValues?.avatar_url} />
           </Form.Item>
           {formItems.map((formItem) => (
             <Form.Item key={formItem.name} name={formItem.name} label={formItem.label} rules={[{ required: true }]}>
