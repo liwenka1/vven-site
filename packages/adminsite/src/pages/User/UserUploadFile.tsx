@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { message, Upload } from 'antd'
+import { Avatar, message, Upload } from 'antd'
 import type { RcFile, UploadProps } from 'antd/es/upload/interface'
 import { userApi } from '@/api/user'
 
@@ -19,11 +19,11 @@ const beforeUpload = (file: RcFile) => {
 interface UserUploadFileProps {
   id?: number
   avatarUrl?: string
+  onUploadSuccess: (url: string) => void
 }
 
-const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl }) => {
+const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUploadSuccess }) => {
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState<string | undefined>(avatarUrl)
 
   const uploadFile: UploadProps['customRequest'] = async (options) => {
     const { file, onSuccess, onError } = options
@@ -31,10 +31,12 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl }) => {
     setLoading(true)
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('id', String(id))
+    if (id) {
+      formData.append('id', String(id))
+    }
     const res = await userApi.upload(formData)
     setLoading(false)
-    setImageUrl(res.data)
+    onUploadSuccess(res.data)
   }
 
   const uploadButton = (
@@ -54,7 +56,7 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl }) => {
         beforeUpload={beforeUpload}
         customRequest={uploadFile}
       >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+        {avatarUrl ? <Avatar className='w-full h-full' src={avatarUrl} alt="avatar" size="large" /> : uploadButton}
       </Upload>
     </>
   )

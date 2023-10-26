@@ -4,7 +4,7 @@ export interface LoginParams {
 }
 
 export interface LoginData {
-  avatar_url: any
+  avatarUrl: any
   username: string
   email: string
   nickname: string

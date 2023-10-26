@@ -53,7 +53,7 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
         <Column title="Username" dataIndex="username" key="username" />
         <Column title="Email" dataIndex="email" key="email" />
         <Column title="Nickname" dataIndex="nickname" key="nickname" />
-        <Column title="Create Time" dataIndex="create_time" key="create_time" sorter />
+        <Column title="Create Time" dataIndex="createTime" key="createTime" sorter />
         <Column title="Role" dataIndex="role" key="role" render={(role) => <Tag color="blue">{role}</Tag>} />
         <Column
           title="Action"

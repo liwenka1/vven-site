@@ -16,7 +16,7 @@ model User {
   password    String?   @db.VarChar(50)
   nickname    String?   @db.VarChar(50)
   email       String?   @db.VarChar(50)
-  create_time DateTime? @default(now()) @db.Timestamp(0)
-  avatar_url  String?   @db.VarChar(255)
+  createTime DateTime? @default(now()) @db.Timestamp(0)
+  avatarUrl  String?   @db.VarChar(255)
   role        String?   @db.VarChar(50)
 }

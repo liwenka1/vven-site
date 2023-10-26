@@ -37,15 +37,15 @@ export class UserService {
       where: where,
       select: {
         id: true,
-        avatar_url: true,
+        avatarUrl: true,
         username: true,
         email: true,
         nickname: true,
         role: true,
-        create_time: true
+        createTime: true
       },
       orderBy: {
-        create_time: orderBy
+        createTime: orderBy
       }
     })
     if (orderBy) {
@@ -126,7 +126,7 @@ export class UserService {
   async upload(file: Express.Multer.File, id?: string): Promise<string> {
     const avatarUrl = process.env.UPLOADURL + `/static/${file.filename}`
     if (id) {
-      this.update({ id: Number(id), avatar_url: avatarUrl })
+      this.update({ id: Number(id), avatarUrl: avatarUrl })
     }
     return avatarUrl
   }

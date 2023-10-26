@@ -1,9 +1,10 @@
 import { userApi } from '@/api/user'
-import { UserSearchFilters, UserWithoutPassword } from '@/api/user/type'
+import { UserCreateOrUpdateFilters, UserWithoutPassword } from '@/api/user/type'
 import useMessageApi from '@/hooks/useMessageApi '
 import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
 import UserUploadFile from './UserUploadFile'
+import { useState } from 'react'
 
 interface UserModalProps {
   isModalOpen: boolean
@@ -36,16 +37,14 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
   const [form] = Form.useForm()
 
   const onFinish = async (values: unknown) => {
-    console.log(values)
+    const params = values as UserCreateOrUpdateFilters
     try {
       if (type === 'CREATE') {
-        const params = values as UserSearchFilters
-        await userApi.create(params)
+        await userApi.create({ ...params, avatarUrl })
         success('添加用户成功！')
       } else if (type === 'UPDATE') {
-        const params = values as UserSearchFilters
         if (initialValues) {
-          await userApi.update({ id: initialValues.id, ...params })
+          await userApi.update({ id: initialValues.id, ...params, avatarUrl })
           success('修改用户成功！')
         }
       }
@@ -60,6 +59,7 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
 
   const onReset = () => {
     form.resetFields()
+    setAvatarUrl('')
   }
 
   const formItems = [
@@ -68,6 +68,11 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
     { name: 'nickname', label: 'Nickname' },
     { name: 'email', label: 'Email' }
   ]
+
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initialValues?.avatarUrl)
+  const handleUploadSuccess = (url: string) => {
+    setAvatarUrl(url)
+  }
 
   return (
     <>
@@ -81,8 +86,8 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
           style={{ maxWidth: 600 }}
           initialValues={initialValues}
         >
-          <Form.Item name="upload" label="Upload">
-            <UserUploadFile id={initialValues?.id} avatarUrl={initialValues?.avatar_url} />
+          <Form.Item label="Upload">
+            <UserUploadFile id={initialValues?.id} avatarUrl={avatarUrl} onUploadSuccess={handleUploadSuccess} />
           </Form.Item>
           {formItems.map((formItem) => (
             <Form.Item key={formItem.name} name={formItem.name} label={formItem.label} rules={[{ required: true }]}>
@@ -94,15 +99,6 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
               <Option value="admin">admin</Option>
               <Option value="user">user</Option>
             </Select>
-          </Form.Item>
-          <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}>
-            {({ getFieldValue }) =>
-              getFieldValue('gender') === 'other' ? (
-                <Form.Item name="customizeGender" label="Customize Gender" rules={[{ required: true }]}>
-                  <Input />
-                </Form.Item>
-              ) : null
-            }
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Space size="small">

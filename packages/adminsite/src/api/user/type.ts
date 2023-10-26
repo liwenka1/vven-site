@@ -4,8 +4,8 @@ interface User {
   password: string
   nickname: string
   email: string
-  create_time: Date
-  avatar_url: string
+  createTime: Date
+  avatarUrl: string
   role: string
 }
 
@@ -13,7 +13,7 @@ export type UserWithoutPassword = Omit<User, 'password'>
 
 export type UserSearchFilters = Partial<Omit<User & { role: 'admin' | 'user' }, 'password'>>
 
-export type UserCreateOrUpdateFilters = Partial<Omit<User & { role: 'admin' | 'user' }, 'id' | 'create_time'>>
+export type UserCreateOrUpdateFilters = Partial<Omit<User & { role: 'admin' | 'user' }, 'id' | 'createTime'>>
 
 export type UserDeleteFilters = Pick<User, 'id'>
 
