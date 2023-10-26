@@ -123,8 +123,8 @@ export class UserService {
     }
   }
 
-  async upload(file: Express.Multer.File, id?: number): Promise<string> {
-    const avatarUrl = `/static/${file.filename}`
+  async upload(file: Express.Multer.File, id?: string): Promise<string> {
+    const avatarUrl = process.env.UPLOADURL + `/static/${file.filename}`
     if (id) {
       this.update({ id: Number(id), avatar_url: avatarUrl })
     }

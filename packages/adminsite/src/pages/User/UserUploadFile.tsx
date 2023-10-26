@@ -54,11 +54,7 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl }) => {
         beforeUpload={beforeUpload}
         customRequest={uploadFile}
       >
-        {imageUrl ? (
-          <img src={`http://localhost:4000${imageUrl}`} alt="avatar" style={{ width: '100%' }} />
-        ) : (
-          uploadButton
-        )}
+        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
       </Upload>
     </>
   )
