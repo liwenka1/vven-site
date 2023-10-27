@@ -32,26 +32,21 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isModalOpen, setIsModalOpen
     },
     {
       key: '3',
-      label: 'Live',
-      children: 'Hangzhou, Zhejiang'
+      label: 'NickName',
+      children: profile?.nickname
     },
     {
       key: '4',
-      label: 'Remark',
-      children: 'empty'
-    },
-    {
-      key: '5',
-      label: 'Address',
-      children: 'No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China'
+      label: 'Role',
+      children: profile?.role
     }
   ]
 
   return (
     <>
-      <Modal title="Profile" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Avatar className="cursor-pointer" icon={<UserOutlined />} />
-        <Descriptions items={items} />
+      <Modal title="Profile" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+        <Avatar className="cursor-pointer my-5 w-20 h-20" icon={<UserOutlined />} src={profile?.avatarUrl} size="large" />
+        <Descriptions className="my-5" bordered items={items} size="small" column={1} />
       </Modal>
     </>
   )

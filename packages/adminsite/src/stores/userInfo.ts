@@ -1,11 +1,11 @@
-import { Profile } from '@/api/user/type'
+import { UserWithoutPassword } from '@/api/user/type'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface userInfoState {
   token: string | null
   setToken: (token: userInfoState['token']) => void
-  profile: Profile | null
+  profile: UserWithoutPassword | null
   setProfile: (info: userInfoState['profile']) => void
 }
 

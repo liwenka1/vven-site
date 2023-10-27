@@ -5,6 +5,8 @@ import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
 import UserUploadFile from './UserUploadFile'
 import { useState } from 'react'
+import useUserInfoStore from '@/stores/userInfo'
+import { useNavigate } from 'react-router-dom'
 
 interface UserModalProps {
   isModalOpen: boolean
@@ -35,6 +37,8 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
   }
 
   const [form] = Form.useForm()
+  const { profile, setToken, setProfile } = useUserInfoStore()
+  const navigate = useNavigate()
 
   const onFinish = async (values: unknown) => {
     const params = values as UserCreateOrUpdateFilters
@@ -45,6 +49,11 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
       } else if (type === 'UPDATE') {
         if (initialValues) {
           await userApi.update({ id: initialValues.id, ...params, avatarUrl })
+          if (initialValues.id === profile?.id) {
+            setToken(null)
+            setProfile(null)
+            navigate('/login')
+          }
           success('修改用户成功！')
         }
       }

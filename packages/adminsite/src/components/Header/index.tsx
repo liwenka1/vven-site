@@ -11,7 +11,7 @@ interface BasicHeaderProps {
 }
 
 const BasicHeader: React.FC<BasicHeaderProps> = ({ onClick }) => {
-  const { setToken, setProfile } = useUserInfoStore()
+  const { profile, setToken, setProfile } = useUserInfoStore()
   const navigate = useNavigate()
 
   const handleLogOut = () => {
@@ -43,7 +43,7 @@ const BasicHeader: React.FC<BasicHeaderProps> = ({ onClick }) => {
       <div>
         <ProfileModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         <Dropdown menu={{ items }} placement="bottomRight" arrow>
-          <Avatar className="cursor-pointer" icon={<UserOutlined />} />
+          <Avatar className="cursor-pointer" icon={<UserOutlined />} src={profile?.avatarUrl} />
         </Dropdown>
       </div>
     </div>
