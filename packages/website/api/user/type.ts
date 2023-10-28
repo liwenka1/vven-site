@@ -1,13 +1,14 @@
-export interface LoginParams {
+interface User {
+  id: number
   username: string
   password: string
+  nickname: string
+  email: string
+  createTime: Date
+  avatarUrl: string
+  role: string
 }
 
-export interface LoginData {
-  avatarUrl: any
-  username: string
-  email: string
-  nickname: string
-  role: any
-  token: string
-}
+export type UserWithoutPassword = Omit<User, 'password'>
+
+export type UserLoginParams = Pick<User, 'username' | 'password'>
