@@ -11,12 +11,30 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  username    String?   @db.VarChar(50)
-  password    String?   @db.VarChar(50)
-  nickname    String?   @db.VarChar(50)
-  email       String?   @db.VarChar(50)
+  id         Int       @id @default(autoincrement())
+  username   String?   @db.VarChar(50)
+  password   String?   @db.VarChar(50)
+  nickname   String?   @db.VarChar(50)
+  email      String?   @db.VarChar(50)
   createTime DateTime? @default(now()) @db.Timestamp(0)
   avatarUrl  String?   @db.VarChar(255)
-  role        String?   @db.VarChar(50)
+  role       String?   @db.VarChar(50)
+}
+
+model Article {
+  id         Int       @id @default(autoincrement())
+  title      String?   @db.VarChar(50)
+  tags       Tag[]
+  content    String?   @db.Text
+  author     String?   @db.VarChar(50)
+  isDraft    Boolean?  @default(false)
+  updateTime DateTime? @default(now()) @db.Timestamp(0)
+  createTime DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  articleId Int?
+  Article   Article? @relation(fields: [articleId], references: [id])
 }
