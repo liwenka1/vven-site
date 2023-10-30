@@ -67,12 +67,6 @@ export class UserService {
     }
   }
 
-  async delete(filters: UserDeleteFilters): Promise<void> {
-    await this.prisma.user.delete({
-      where: filters
-    })
-  }
-
   async update(filters: UserCreateOrUpdateFilters & { id: number }): Promise<void> {
     if (filters.password) {
       filters.password = md5(filters.password)
@@ -83,6 +77,12 @@ export class UserService {
         id: id
       },
       data: data
+    })
+  }
+
+  async delete(filters: UserDeleteFilters): Promise<void> {
+    await this.prisma.user.delete({
+      where: filters
     })
   }
 

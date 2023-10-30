@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './common/exceptions/http.exception.filter'
 import { UserModule } from './user/user.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { join } from 'path'
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public/uploaded'),
       serveRoot: '/static'
-    })
+    }),
+    ArticleModule
   ],
   controllers: [AppController],
   providers: [
