@@ -1,7 +1,8 @@
 import { http } from '@/utils/request'
+import { ArticleSearchFilters } from './type'
 
 export const article = {
-  articleSearch: (params: unknown) => {
+  search: (params: ArticleSearchFilters) => {
     return http.post('/article/search', params)
   }
 }
