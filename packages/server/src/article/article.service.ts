@@ -6,9 +6,12 @@ import {
   ArticleSearchFilters,
   TagCreateOrUpdateFilters,
   TagDeleteFilters,
-  TagSearchFilters
+  TagSearchFilters,
+  ArticleTagSearchFilters,
+  ArticleTagCreateOrUpdateFilters,
+  ArticleTagDeleteFilters
 } from './article.dto'
-import { Article, Tag } from '@prisma/client'
+import { Article, ArticleTag, Tag } from '@prisma/client'
 
 @Injectable()
 export class ArticleService {
@@ -54,7 +57,7 @@ export class ArticleService {
     })
   }
 
-  findManytag(filters: TagSearchFilters): Promise<Tag[]> {
+  findManyTag(filters: TagSearchFilters): Promise<Tag[]> {
     return this.prisma.tag.findMany({
       where: filters
     })
@@ -78,6 +81,40 @@ export class ArticleService {
 
   async deleteTag(filters: TagDeleteFilters): Promise<void> {
     await this.prisma.tag.delete({
+      where: filters
+    })
+  }
+
+  findFirstArticleTag(filters: ArticleTagSearchFilters): Promise<ArticleTag | null> {
+    return this.prisma.articleTag.findFirst({
+      where: filters
+    })
+  }
+
+  findManyArticleTag(filters: ArticleTagSearchFilters): Promise<ArticleTag[]> {
+    return this.prisma.articleTag.findMany({
+      where: filters
+    })
+  }
+
+  async createArticleTag(filters: ArticleTagCreateOrUpdateFilters): Promise<void> {
+    await this.prisma.articleTag.create({
+      data: filters
+    })
+  }
+
+  async updateArticleTag(filters: ArticleTagCreateOrUpdateFilters & { id: number }): Promise<void> {
+    const { id, ...data } = filters
+    await this.prisma.articleTag.update({
+      where: {
+        id: id
+      },
+      data: data
+    })
+  }
+
+  async deleteArticleTag(filters: ArticleTagDeleteFilters): Promise<void> {
+    await this.prisma.articleTag.delete({
       where: filters
     })
   }

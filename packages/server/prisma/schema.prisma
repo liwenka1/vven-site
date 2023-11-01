@@ -22,19 +22,26 @@ model User {
 }
 
 model Article {
-  id         Int       @id @default(autoincrement())
-  title      String?   @db.VarChar(50)
-  tags       Tag[]
-  content    String?   @db.Text
-  author     String?   @db.VarChar(50)
-  isDraft    Boolean?  @default(false)
-  updateTime DateTime? @default(now()) @db.Timestamp(0)
-  createTime DateTime? @default(now()) @db.Timestamp(0)
+  id          Int          @id @default(autoincrement())
+  title       String?      @db.VarChar(50)
+  content     String?      @db.Text
+  author      String?      @db.VarChar(50)
+  isDraft     Boolean?     @default(false)
+  updateTime  DateTime?    @default(now()) @db.Timestamp(0)
+  createTime  DateTime?    @default(now()) @db.Timestamp(0)
+  articleTags ArticleTag[]
 }
 
 model Tag {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  articleId Int?
-  Article   Article? @relation(fields: [articleId], references: [id])
+  id          Int          @id @default(autoincrement())
+  name        String?
+  tagArticles ArticleTag[]
+}
+
+model ArticleTag {
+  id        Int     @id @default(autoincrement())
+  articleId Int
+  tagId     Int
+  article   Article @relation(fields: [articleId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
 }
