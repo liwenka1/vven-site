@@ -1,13 +1,7 @@
-import ArticleSearchBar from '@/components/Article/ArticleSearchBar'
-import ArticleTableBar from '@/components/Article/ArticleTableBar'
+import ArticlePage from '@/components/Article'
 
 const Draft = () => {
-  return (
-    <>
-      <ArticleSearchBar type="DRAFT" />
-      <ArticleTableBar type="DRAFT" />
-    </>
-  )
+  return <ArticlePage type="DRAFT" />
 }
 
 export default Draft

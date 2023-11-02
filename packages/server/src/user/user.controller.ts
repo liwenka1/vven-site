@@ -49,14 +49,14 @@ export class UserController {
     return this.userService.create(params)
   }
 
-  @Post('delete')
-  delete(@Body() params: { id: number }): Promise<void> {
-    return this.userService.delete(params)
-  }
-
   @Post('update')
   update(@Body() params: UserCreateOrUpdateFilters & { id: number }): Promise<void> {
     return this.userService.update(params)
+  }
+
+  @Post('delete')
+  delete(@Body() params: { id: number }): Promise<void> {
+    return this.userService.delete(params)
   }
 
   @UseInterceptors(FileInterceptor('file'))

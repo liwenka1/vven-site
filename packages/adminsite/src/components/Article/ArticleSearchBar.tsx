@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
+import { ArticleSearchFilters } from '@/api/article/type'
 
 const { Option } = Select
 
 interface ArticleSearchBarProps {
-  type: 'ARTICLE' | 'DRAFT'
+	search: () => void
+  searchParams: ArticleSearchFilters & { orderBy?: 'asc' | 'desc' }
+  setSearchParams: React.Dispatch<React.SetStateAction<ArticleSearchBarProps['searchParams']>>
 }
 
 const ArticleSearchBar: React.FC<ArticleSearchBarProps> = () => {

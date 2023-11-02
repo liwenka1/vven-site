@@ -29,7 +29,7 @@ model Article {
   description String?      @db.VarChar(100)
   isDraft     Boolean?     @default(false)
   isFeatured  Boolean?     @default(false)
-  updateTime  DateTime?    @default(now()) @db.Timestamp(0)
+  updateTime  DateTime?    @default(now()) @updatedAt @db.Timestamp(0)
   createTime  DateTime?    @default(now()) @db.Timestamp(0)
   articleTags ArticleTag[]
 }

@@ -29,11 +29,11 @@ export const userApi = {
   create: (params: UserCreateOrUpdateFilters) => {
     return http.post<ResponseData<void>>('user/create', params)
   },
-  delete: (params: UserDeleteFilters) => {
-    return http.post<ResponseData<void>>('user/delete', params)
-  },
   update: (params: UserCreateOrUpdateFilters & { id: number }) => {
     return http.post<ResponseData<void>>('user/update', params)
+  },
+  delete: (params: UserDeleteFilters) => {
+    return http.post<ResponseData<void>>('user/delete', params)
   },
   upload: (formData: FormData) => {
     return http.post<ResponseData<string>>('user/upload', formData)

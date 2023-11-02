@@ -1,6 +1,7 @@
+import { Article, ArticleSearchFilters } from '@/api/article/type'
 import { Space, Table, Tag } from 'antd'
 
-const { Column, ColumnGroup } = Table
+const { Column } = Table
 
 interface DataType {
   key: React.Key
@@ -39,15 +40,15 @@ const data: DataType[] = [
 ]
 
 interface ArticleTableBarProps {
-  type: 'ARTICLE' | 'DRAFT'
+  article: Article[]
+  search: () => void
+  searchParams: ArticleSearchFilters & { orderBy?: 'asc' | 'desc' }
+  setSearchParams: React.Dispatch<React.SetStateAction<ArticleTableBarProps['searchParams']>>
 }
 
 const ArticleTableBar: React.FC<ArticleTableBarProps> = () => (
   <Table dataSource={data}>
-    <ColumnGroup title="Name">
-      <Column title="First Name" dataIndex="firstName" key="firstName" />
-      <Column title="Last Name" dataIndex="lastName" key="lastName" />
-    </ColumnGroup>
+    <Column title="Age" dataIndex="age" key="age" />
     <Column title="Age" dataIndex="age" key="age" />
     <Column title="Address" dataIndex="address" key="address" />
     <Column
