@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { Avatar, message, Upload } from 'antd'
 import type { RcFile, UploadProps } from 'antd/es/upload/interface'
 import { userApi } from '@/api/user'
 
-const beforeUpload = (file: RcFile) => {
+const beforeUpload = (file: RcFile): boolean => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJpgOrPng) {
     message.error('You can only upload JPG/PNG file!')
@@ -26,8 +26,7 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUpload
   const [loading, setLoading] = useState(false)
 
   const uploadFile: UploadProps['customRequest'] = async (options) => {
-    const { file, onSuccess, onError } = options
-    console.log(file, onSuccess, onError, id)
+    const { file } = options
     setLoading(true)
     const formData = new FormData()
     formData.append('file', file)
@@ -56,7 +55,7 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUpload
         beforeUpload={beforeUpload}
         customRequest={uploadFile}
       >
-        {avatarUrl ? <Avatar className='w-full h-full' src={avatarUrl} alt="avatar" size="large" /> : uploadButton}
+        {avatarUrl ? <Avatar className="w-full h-full" src={avatarUrl} alt="avatar" size="large" /> : uploadButton}
       </Upload>
     </>
   )

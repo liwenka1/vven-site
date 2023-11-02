@@ -16,6 +16,11 @@ interface UserModalProps {
   type: 'UPDATE' | 'CREATE'
 }
 
+interface FormItem {
+  name: string
+  label: string
+}
+
 const { Option } = Select
 
 const layout = {
@@ -68,10 +73,10 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
 
   const onReset = () => {
     form.resetFields()
-    setAvatarUrl('')
+    setAvatarUrl(initialValues?.avatarUrl)
   }
 
-  const formItems = [
+  const formItems: FormItem[] = [
     { name: 'username', label: 'Username' },
     { name: 'password', label: 'Password' },
     { name: 'nickname', label: 'Nickname' },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Popconfirm, Space, Table, Tag } from 'antd'
 import type { TableProps } from 'antd/es/table'
 import { UserWithoutPassword, UserSearchFilters } from '@/api/user/type'
@@ -7,14 +7,14 @@ import UserModal from './UserModal'
 
 const { Column } = Table
 
-interface TableBarProps {
+interface UserTableBarProps {
   users: UserWithoutPassword[]
   search: () => void
   searchParams: UserSearchFilters & { orderBy?: 'asc' | 'desc' }
-  setSearchParams: React.Dispatch<React.SetStateAction<TableBarProps['searchParams']>>
+  setSearchParams: React.Dispatch<React.SetStateAction<UserTableBarProps['searchParams']>>
 }
 
-const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSearchParams }) => {
+const UserTableBar: React.FC<UserTableBarProps> = ({ users, search, searchParams, setSearchParams }) => {
   const confirm = async (user: UserWithoutPassword) => {
     await userApi.delete(user)
     search()
@@ -33,8 +33,7 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
     setIsModalOpen(true)
   }
 
-  const onChange: TableProps<UserWithoutPassword>['onChange'] = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra)
+  const onChange: TableProps<UserWithoutPassword>['onChange'] = (_, __, sorter) => {
     if (!Array.isArray(sorter)) {
       if (sorter.order === 'descend') {
         setSearchParams({ ...searchParams, orderBy: 'desc' })
@@ -58,7 +57,7 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
         <Column
           title="Action"
           key="action"
-          render={(user) => (
+          render={(user: UserWithoutPassword) => (
             <Space size="middle">
               <Button type="link" onClick={() => showModal(user)}>
                 Invite
@@ -92,4 +91,4 @@ const TableBar: React.FC<TableBarProps> = ({ users, search, searchParams, setSea
   )
 }
 
-export default TableBar
+export default UserTableBar

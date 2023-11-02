@@ -20,7 +20,7 @@ const BasicHeader: React.FC<BasicHeaderProps> = ({ onClick }) => {
     navigate('/login')
   }
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
     setIsModalOpen(true)

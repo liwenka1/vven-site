@@ -7,7 +7,7 @@ import { Article } from '@prisma/client'
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  @Post('search')
+  @Post('articleSearch')
   articleSearch(@Body() params: UserSearchFilters): Promise<Article[]> {
     return this.articleService.findManyArticle(params)
   }

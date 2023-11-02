@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 const LoginButton = () => {
   const { userInfo, setUserInfo } = useUserInfoStore()
-  const [isLogin, setIsLogin] = useState<boolean>(false)
+  const [isLogin, setIsLogin] = useState(false)
   useEffect(() => {
     if (userInfo) {
       setIsLogin(true)

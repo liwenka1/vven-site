@@ -82,7 +82,7 @@ const Login = () => {
 
   const { contextHolder, warning, success } = useMessageApi()
 
-  const buttonTexts = {
+  const buttonTexts: { [key in Variant]: string } = {
     LOGIN: 'Sign in',
     REGISTER: 'Register',
     RESET: 'Reset'

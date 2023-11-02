@@ -5,13 +5,18 @@ import UserModal from './UserModal'
 
 const { Option } = Select
 
-interface SearchBarProps {
+interface UserSearchBarProps {
   search: () => void
   searchParams: UserSearchFilters & { orderBy?: 'asc' | 'desc' }
-  setSearchParams: React.Dispatch<React.SetStateAction<SearchBarProps['searchParams']>>
+  setSearchParams: React.Dispatch<React.SetStateAction<UserSearchBarProps['searchParams']>>
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ search, searchParams, setSearchParams }) => {
+interface FormItem {
+  name: string
+  label: string
+}
+
+const UserSearchBar: React.FC<UserSearchBarProps> = ({ search, searchParams, setSearchParams }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
 
@@ -22,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ search, searchParams, setSearchPa
     padding: 24
   }
 
-  const formItems = [
+  const formItems: FormItem[] = [
     { name: 'username', label: 'Username' },
     { name: 'nickname', label: 'Nickname' },
     { name: 'email', label: 'Email' }
@@ -108,4 +113,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ search, searchParams, setSearchPa
   )
 }
 
-export default SearchBar
+export default UserSearchBar
