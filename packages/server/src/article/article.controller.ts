@@ -1,20 +1,25 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { ArticleService } from './article.service'
-import { Article } from '@prisma/client'
-import { ArticleCreateOrUpdateFilters, ArticleDeleteFilters, ArticleSearchFilters } from './article.dto'
+import {
+  ArticleCreateOrUpdateFilters,
+  ArticleCreateOrUpdateFiltersWithTag,
+  ArticleDeleteFilters,
+  ArticleSearchFilters,
+  ArticleWithTag
+} from './article.dto'
 
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post('articleSearch')
-  articleSearch(@Body() params: ArticleSearchFilters): Promise<Article[]> {
-    return this.articleService.findManyArticle(params)
+  articleSearch(@Body() params: ArticleSearchFilters): Promise<ArticleWithTag[]> {
+    return this.articleService.articleSearch(params)
   }
 
   @Post('articleCreate')
-  articleCreate(@Body() params: ArticleCreateOrUpdateFilters): Promise<void> {
-    return this.articleService.createArticle(params)
+  articleCreate(@Body() params: ArticleCreateOrUpdateFiltersWithTag): Promise<void> {
+    return this.articleService.articleCreate(params)
   }
 
   @Post('articleUpdate')
