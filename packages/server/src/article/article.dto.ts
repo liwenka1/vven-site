@@ -25,8 +25,6 @@ export type ArticleTagSearchFilters = Partial<ArticleTag>
 
 export type ArticleTagCreateOrUpdateFilters = Omit<ArticleTag, 'id'>
 
-export type ArticleTagDeleteFilters = Pick<ArticleTag, 'id'>
-
 export type ArticleWithTag = Article & { tags: Tag[] }
 
 export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & { tags: string[] }

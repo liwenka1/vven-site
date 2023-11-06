@@ -9,7 +9,6 @@ import {
   TagSearchFilters,
   ArticleTagSearchFilters,
   ArticleTagCreateOrUpdateFilters,
-  ArticleTagDeleteFilters,
   ArticleWithTag,
   ArticleCreateOrUpdateFiltersWithTag
 } from './article.dto'
@@ -119,8 +118,8 @@ export class ArticleService {
     })
   }
 
-  async deleteArticleTag(filters: ArticleTagDeleteFilters): Promise<void> {
-    await this.prisma.articleTag.delete({
+  async deleteManyArticleTag(filters: ArticleTagSearchFilters): Promise<void> {
+    await this.prisma.articleTag.deleteMany({
       where: filters
     })
   }
@@ -164,10 +163,8 @@ export class ArticleService {
     const { tags, ...data } = params
     await this.updateArticle(data)
     if (tags.length) {
-      const articleTags = await this.findManyArticleTag({ articleId: data.id })
-      for (const articleTag of articleTags) {
-        this.deleteArticleTag({ id: articleTag.id })
-      }
+      await this.findManyArticleTag({ articleId: data.id })
+      await this.deleteManyArticleTag({ articleId: data.id })
       for (const tag of tags) {
         const firstTag = await this.findFirstTag({ name: tag })
         let tagId: number
@@ -183,10 +180,7 @@ export class ArticleService {
   }
 
   async articleDelete(params: ArticleDeleteFilters): Promise<void> {
-    const articleTags = await this.findManyArticleTag({ articleId: params.id })
-    for (const articleTag of articleTags) {
-      await this.deleteArticleTag({ id: articleTag.id })
-    }
+    await this.deleteManyArticleTag({ articleId: params.id })
     await this.deleteArticle(params)
   }
 }
