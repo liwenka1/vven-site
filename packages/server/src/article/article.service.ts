@@ -26,8 +26,10 @@ export class ArticleService {
   }
 
   findManyArticle(filters: ArticleSearchFilters): Promise<Article[]> {
+    const { orderBy, ...where } = filters
     return this.prisma.article.findMany({
-      where: filters
+      where: where,
+      orderBy: orderBy
     })
   }
 
@@ -126,24 +128,19 @@ export class ArticleService {
   async articleSearch(params: ArticleSearchFilters): Promise<ArticleWithTag[]> {
     const articles = await this.findManyArticle(params)
     const articleWithTags: ArticleWithTag[] = []
-
     for (const article of articles) {
       const tags: Tag[] = []
-      const articleTags = await this.findManyArticleTag({ id: article.id })
-
+      const articleTags = await this.findManyArticleTag({ articleId: article.id })
       for (const articleTag of articleTags) {
         const tag = await this.findFirstTag({ id: articleTag.tagId })
         tags.push(tag)
       }
-
       const articleWithTag: ArticleWithTag = {
         ...article,
         tags
       }
-
       articleWithTags.push(articleWithTag)
     }
-
     return articleWithTags
   }
 
@@ -161,5 +158,35 @@ export class ArticleService {
       }
       await this.createArticleTag({ tagId: tagId, articleId: article.id })
     }
+  }
+
+  async articleUpdate(params: ArticleCreateOrUpdateFiltersWithTag & { id: number }): Promise<void> {
+    const { tags, ...data } = params
+    await this.updateArticle(data)
+    if (tags.length) {
+      const articleTags = await this.findManyArticleTag({ articleId: data.id })
+      for (const articleTag of articleTags) {
+        this.deleteArticleTag({ id: articleTag.id })
+      }
+      for (const tag of tags) {
+        const firstTag = await this.findFirstTag({ name: tag })
+        let tagId: number
+        if (!firstTag) {
+          const { id } = await this.createTag({ name: tag })
+          tagId = id
+        } else {
+          tagId = firstTag.id
+        }
+        await this.createArticleTag({ tagId: tagId, articleId: data.id })
+      }
+    }
+  }
+
+  async articleDelete(params: ArticleDeleteFilters): Promise<void> {
+    const articleTags = await this.findManyArticleTag({ articleId: params.id })
+    for (const articleTag of articleTags) {
+      await this.deleteArticleTag({ id: articleTag.id })
+    }
+    await this.deleteArticle(params)
   }
 }

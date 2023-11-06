@@ -1,81 +1,75 @@
 import { Article, ArticleSearchFilters } from '@/api/article/type'
 import { Space, Table, Tag } from 'antd'
+import { TableProps } from 'antd/lib'
 
 const { Column } = Table
-
-interface DataType {
-  key: React.Key
-  firstName: string
-  lastName: string
-  age: number
-  address: string
-  tags: string[]
-}
-
-const data: DataType[] = [
-  {
-    key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-]
 
 interface ArticleTableBarProps {
   article: Article[]
   search: () => void
-  searchParams: ArticleSearchFilters & { orderBy?: 'asc' | 'desc' }
+  searchParams: ArticleSearchFilters
   setSearchParams: React.Dispatch<React.SetStateAction<ArticleTableBarProps['searchParams']>>
 }
 
-const ArticleTableBar: React.FC<ArticleTableBarProps> = () => (
-  <Table dataSource={data}>
-    <Column title="Age" dataIndex="age" key="age" />
-    <Column title="Age" dataIndex="age" key="age" />
-    <Column title="Address" dataIndex="address" key="address" />
-    <Column
-      title="Tags"
-      dataIndex="tags"
-      key="tags"
-      render={(tags: string[]) => (
-        <>
-          {tags.map((tag) => (
-            <Tag color="blue" key={tag}>
-              {tag}
-            </Tag>
-          ))}
-        </>
-      )}
-    />
-    <Column
-      title="Action"
-      key="action"
-      render={(_, record: DataType) => (
-        <Space size="middle">
-          <a>Invite {record.lastName}</a>
-          <a>Delete</a>
-        </Space>
-      )}
-    />
-  </Table>
-)
+type Tags = {
+  id: number
+  name: string
+}[]
+
+const ArticleTableBar: React.FC<ArticleTableBarProps> = ({ article, search, searchParams, setSearchParams }) => {
+  const onChange: TableProps<Article>['onChange'] = (_, __, sorter) => {
+    if (!Array.isArray(sorter)) {
+      const { field, order } = sorter
+      if (field === 'updateTime') {
+        setSearchParams({ ...searchParams, orderBy: { updateTime: order === 'descend' ? 'desc' : 'asc' } })
+      } else if (field === 'createTime') {
+        setSearchParams({ ...searchParams, orderBy: { createTime: order === 'descend' ? 'desc' : 'asc' } })
+      } else {
+        setSearchParams({ ...searchParams, orderBy: undefined })
+      }
+      search()
+    }
+  }
+
+  return (
+    <Table dataSource={article} rowKey="id" onChange={onChange}>
+      <Column title="Title" dataIndex="title" key="title" />
+      <Column title="Author" dataIndex="author" key="author" />
+      <Column title="Description" dataIndex="description" key="description" />
+      <Column title="Update Time" dataIndex="updateTime" key="updateTime" sorter />
+      <Column title="Create Time" dataIndex="createTime" key="createTime" sorter />
+      <Column
+        title="IsFeatured"
+        dataIndex="isFeatured"
+        key="isFeatured"
+        render={(isFeatured: boolean) => <Tag color="blue">{isFeatured ? '是' : '否'}</Tag>}
+      />
+      <Column
+        title="Tags"
+        dataIndex="tags"
+        key="tags"
+        render={(tags: Tags) => (
+          <>
+            {tags.map((tag) => (
+              <Tag color="blue" key={tag.id}>
+                {tag.name}
+              </Tag>
+            ))}
+          </>
+        )}
+      />
+      <Column
+        title="Action"
+        key="action"
+        render={(article: Article) => (
+          <Space size="middle">
+            <a>Invite {article.title}</a>
+            <a>Delete</a>
+          </Space>
+        )}
+      />
+    </Table>
+  )
+}
 
 export default ArticleTableBar

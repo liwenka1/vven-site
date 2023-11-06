@@ -7,7 +7,7 @@ const { Option } = Select
 
 interface ArticleSearchBarProps {
 	search: () => void
-  searchParams: ArticleSearchFilters & { orderBy?: 'asc' | 'desc' }
+  searchParams: ArticleSearchFilters
   setSearchParams: React.Dispatch<React.SetStateAction<ArticleSearchBarProps['searchParams']>>
 }
 

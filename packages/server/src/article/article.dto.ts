@@ -2,7 +2,14 @@ import { Article } from '@prisma/client'
 import { Tag } from '@prisma/client'
 import { ArticleTag } from '@prisma/client'
 
-export type ArticleSearchFilters = Partial<Article>
+interface OrderBy {
+  orderBy: {
+    updateTime?: 'asc' | 'desc'
+    createTime?: 'asc' | 'desc'
+  }
+}
+
+export type ArticleSearchFilters = Partial<Article & OrderBy>
 
 export type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createTime'>>
 

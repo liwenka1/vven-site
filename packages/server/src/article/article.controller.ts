@@ -1,7 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { ArticleService } from './article.service'
 import {
-  ArticleCreateOrUpdateFilters,
   ArticleCreateOrUpdateFiltersWithTag,
   ArticleDeleteFilters,
   ArticleSearchFilters,
@@ -23,12 +22,12 @@ export class ArticleController {
   }
 
   @Post('articleUpdate')
-  articleUpdate(@Body() params: ArticleCreateOrUpdateFilters & { id: number }): Promise<void> {
-    return this.articleService.updateArticle(params)
+  articleUpdate(@Body() params: ArticleCreateOrUpdateFiltersWithTag & { id: number }): Promise<void> {
+    return this.articleService.articleUpdate(params)
   }
 
   @Post('articleDelete')
   articleDelete(@Body() params: ArticleDeleteFilters): Promise<void> {
-    return this.articleService.deleteArticle(params)
+    return this.articleService.articleDelete(params)
   }
 }
