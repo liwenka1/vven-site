@@ -4,8 +4,10 @@ import {
   ArticleCreateOrUpdateFiltersWithTag,
   ArticleDeleteFilters,
   ArticleSearchFilters,
-  ArticleWithTag
+  ArticleWithTag,
+  TagSearchFilters
 } from './article.dto'
+import { Tag } from '@prisma/client'
 
 @Controller('article')
 export class ArticleController {
@@ -29,5 +31,10 @@ export class ArticleController {
   @Post('articleDelete')
   articleDelete(@Body() params: ArticleDeleteFilters): Promise<void> {
     return this.articleService.articleDelete(params)
+  }
+
+  @Post('tagSearch')
+  tagSearch(@Body() params: TagSearchFilters): Promise<Tag[]> {
+    return this.articleService.findManyTag(params)
   }
 }

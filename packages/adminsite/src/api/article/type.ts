@@ -33,3 +33,5 @@ export type ArticleSearchFilters = Partial<Article & OrderBy>
 export type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createTime' | 'updateTime'>>
 
 export type ArticleDeleteFilters = Pick<Article, 'id'>
+
+export type TagSearchFilters = Partial<Tag>

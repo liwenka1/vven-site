@@ -61,10 +61,11 @@ export class ArticleService {
     })
   }
 
-  findManyTag(filters: TagSearchFilters): Promise<Tag[]> {
-    return this.prisma.tag.findMany({
+  async findManyTag(filters: TagSearchFilters): Promise<Tag[]> {
+    const tags = await this.prisma.tag.findMany({
       where: filters
     })
+    return tags
   }
 
   async createTag(filters: TagCreateOrUpdateFilters): Promise<Tag> {

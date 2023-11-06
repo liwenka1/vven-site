@@ -1,20 +1,30 @@
-import { useState } from 'react'
-import { DownOutlined } from '@ant-design/icons'
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
 import { ArticleSearchFilters } from '@/api/article/type'
+import { useState } from 'react'
+import ArticleModal from './ArticleModal'
 
 const { Option } = Select
 
-interface ArticleSearchBarProps {
-	search: () => void
-  searchParams: ArticleSearchFilters
-  setSearchParams: React.Dispatch<React.SetStateAction<ArticleSearchBarProps['searchParams']>>
+interface Tag {
+  id: number
+  name: string
 }
 
-const ArticleSearchBar: React.FC<ArticleSearchBarProps> = () => {
+interface ArticleSearchBarProps {
+  search: () => void
+  searchParams: ArticleSearchFilters
+  setSearchParams: React.Dispatch<React.SetStateAction<ArticleSearchBarProps['searchParams']>>
+  tags: Tag[]
+}
+
+interface FormItem {
+  name: string
+  label: string
+}
+
+const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
-  const [expand, setExpand] = useState(false)
 
   const formStyle: React.CSSProperties = {
     maxWidth: 'none',
@@ -23,81 +33,104 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = () => {
     padding: 24
   }
 
+  const formItems: FormItem[] = [
+    { name: 'title', label: 'Title' },
+    { name: 'author', label: 'Author' },
+    { name: 'description', label: 'Description' }
+  ]
+
   const getFields = () => {
-    const count = expand ? 10 : 6
-    const children = []
-    for (let i = 0; i < count; i++) {
-      children.push(
-        <Col span={8} key={i}>
-          {i % 3 !== 1 ? (
+    return (
+      <>
+        {formItems.map((formItem) => (
+          <Col span={8} key={formItem.name}>
             <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
+              name={formItem.name}
+              label={formItem.label}
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: 'Input something!'
                 }
               ]}
             >
-              <Input placeholder="placeholder" />
+              <Input placeholder="placeholder" allowClear />
             </Form.Item>
-          ) : (
-            <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
-              rules={[
-                {
-                  required: true,
-                  message: 'Select something!'
-                }
-              ]}
-              initialValue="1"
-            >
-              <Select>
-                <Option value="1">
-                  longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong
-                </Option>
-                <Option value="2">222</Option>
-              </Select>
-            </Form.Item>
-          )}
+          </Col>
+        ))}
+        <Col span={8}>
+          <Form.Item
+            name="isFeatured"
+            label="IsFeatured"
+            rules={[
+              {
+                required: false,
+                message: 'Select something!'
+              }
+            ]}
+          >
+            <Select allowClear>
+              <Option value="true">是</Option>
+              <Option value="false">否</Option>
+            </Select>
+          </Form.Item>
         </Col>
-      )
-    }
-    return children
+        <Col span={8}>
+          <Form.Item
+            name="role"
+            label="Role"
+            rules={[
+              {
+                required: false,
+                message: 'Select something!'
+              }
+            ]}
+          >
+            <Select allowClear>
+              {tags.map((tag) => (
+                <Option value={tag.id}>{tag.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </>
+    )
   }
 
   const onFinish = (values: unknown) => {
     console.log('Received values of form: ', values)
   }
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
   return (
-    <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
-      <Row gutter={24}>{getFields()}</Row>
-      <div style={{ textAlign: 'right' }}>
-        <Space size="small">
-          <Button type="primary" htmlType="submit">
-            Search
+    <>
+      <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
+        <Row gutter={24}>{getFields()}</Row>
+        <div style={{ textAlign: 'right' }}>
+          <Button type="primary" className="float-left" onClick={showModal}>
+            add
           </Button>
-          <Button
-            onClick={() => {
-              form.resetFields()
-            }}
-          >
-            Clear
-          </Button>
-          <a
-            style={{ fontSize: 12 }}
-            onClick={() => {
-              setExpand(!expand)
-            }}
-          >
-            <DownOutlined rotate={expand ? 180 : 0} /> Collapse
-          </a>
-        </Space>
-      </div>
-    </Form>
+          <Space size="small">
+            <Button type="primary" htmlType="submit">
+              Search
+            </Button>
+            <Button
+              onClick={() => {
+                form.resetFields()
+              }}
+            >
+              Clear
+            </Button>
+          </Space>
+        </div>
+      </Form>
+      <ArticleModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} search={search} type="CREATE" />
+    </>
   )
 }
 
