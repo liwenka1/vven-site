@@ -27,4 +27,4 @@ export type ArticleTagCreateOrUpdateFilters = Omit<ArticleTag, 'id'>
 
 export type ArticleWithTag = Article & { tags: Tag[] }
 
-export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & { tags: string[] }
+export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & { tags: TagSearchFilters[] }

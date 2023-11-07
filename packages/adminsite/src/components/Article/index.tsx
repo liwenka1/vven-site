@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import ArticleSearchBar from './ArticleSearchBar'
 import ArticleTableBar from './ArticleTableBar'
-import { Article, ArticleSearchFilters } from '@/api/article/type'
+import { ArticleSearchFilters, ArticleWithTag } from '@/api/article/type'
 import { articleApi, tagApi } from '@/api/article'
 
 interface ArticlePageProps {
@@ -18,7 +18,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({ type }) => {
     ARTICLE: true,
     DRAFT: false
   }
-  const [article, setArticle] = useState<Article[]>([])
+  const [article, setArticle] = useState<ArticleWithTag[]>([])
   const [tags, setTags] = useState<Tag[]>([])
   const [searchParams, setSearchParams] = useState<ArticleSearchFilters>({ isDraft: isDraft[type] })
   const search = useCallback(async () => {
@@ -40,6 +40,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({ type }) => {
         search={search}
         searchParams={searchParams}
         setSearchParams={setSearchParams}
+        tags={tags}
       />
     </>
   )

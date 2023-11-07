@@ -1,14 +1,9 @@
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
-import { ArticleSearchFilters } from '@/api/article/type'
+import { ArticleSearchFilters, Tag } from '@/api/article/type'
 import { useState } from 'react'
 import ArticleModal from './ArticleModal'
 
 const { Option } = Select
-
-interface Tag {
-  id: number
-  name: string
-}
 
 interface ArticleSearchBarProps {
   search: () => void
@@ -77,8 +72,8 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
         </Col>
         <Col span={8}>
           <Form.Item
-            name="role"
-            label="Role"
+            name="tag"
+            label="Tag"
             rules={[
               {
                 required: false,
@@ -88,7 +83,9 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
           >
             <Select allowClear>
               {tags.map((tag) => (
-                <Option value={tag.id}>{tag.name}</Option>
+                <Option value={tag.id} key={tag.id}>
+                  {tag.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>

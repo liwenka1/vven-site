@@ -35,3 +35,5 @@ export type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createT
 export type ArticleDeleteFilters = Pick<Article, 'id'>
 
 export type TagSearchFilters = Partial<Tag>
+
+export type ArticleWithTag = Article & { tags: Tag[] }

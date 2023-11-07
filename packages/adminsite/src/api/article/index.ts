@@ -1,6 +1,6 @@
 import { http } from '@/utils/request'
 import {
-  Article,
+  ArticleWithTag,
   ArticleSearchFilters,
   ArticleCreateOrUpdateFilters,
   ArticleDeleteFilters,
@@ -11,7 +11,7 @@ import { ResponseData } from '@/type'
 
 export const articleApi = {
   search: (params: ArticleSearchFilters) => {
-    return http.post<ResponseData<Article[]>>('/article/articleSearch', params)
+    return http.post<ResponseData<ArticleWithTag[]>>('/article/articleSearch', params)
   },
   create: (params: ArticleCreateOrUpdateFilters) => {
     return http.post<ResponseData<void>>('article/articleCreate', params)

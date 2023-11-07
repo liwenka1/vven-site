@@ -95,7 +95,7 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
         <Form
           {...layout}
           form={form}
-          name="control-hooks"
+          name="user"
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
           initialValues={initialValues}

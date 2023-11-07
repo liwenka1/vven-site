@@ -144,20 +144,23 @@ export class ArticleService {
     return articleWithTags
   }
 
+  async createOrUpdateTags(tags: TagSearchFilters[], articleId: number): Promise<void> {
+    for (const tag of tags) {
+      let tagId: number
+      if (!tag.id) {
+        const { id } = await this.createTag({ name: tag.name })
+        tagId = id
+      } else {
+        tagId = tag.id
+      }
+      await this.createArticleTag({ tagId, articleId })
+    }
+  }
+
   async articleCreate(params: ArticleCreateOrUpdateFiltersWithTag): Promise<void> {
     const { tags, ...data } = params
     const article = await this.createArticle(data)
-    for (const tag of tags) {
-      const firstTag = await this.findFirstTag({ name: tag })
-      let tagId: number
-      if (!firstTag) {
-        const { id } = await this.createTag({ name: tag })
-        tagId = id
-      } else {
-        tagId = firstTag.id
-      }
-      await this.createArticleTag({ tagId: tagId, articleId: article.id })
-    }
+    await this.createOrUpdateTags(tags, article.id)
   }
 
   async articleUpdate(params: ArticleCreateOrUpdateFiltersWithTag & { id: number }): Promise<void> {
@@ -166,17 +169,7 @@ export class ArticleService {
     if (tags.length) {
       await this.findManyArticleTag({ articleId: data.id })
       await this.deleteManyArticleTag({ articleId: data.id })
-      for (const tag of tags) {
-        const firstTag = await this.findFirstTag({ name: tag })
-        let tagId: number
-        if (!firstTag) {
-          const { id } = await this.createTag({ name: tag })
-          tagId = id
-        } else {
-          tagId = firstTag.id
-        }
-        await this.createArticleTag({ tagId: tagId, articleId: data.id })
-      }
+      await this.createOrUpdateTags(tags, data.id)
     }
   }
 
