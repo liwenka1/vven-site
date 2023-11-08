@@ -104,6 +104,7 @@ const ArticleTableBar: React.FC<ArticleTableBarProps> = ({ article, search, sear
         search={search}
         key={initialValues?.id}
         initialValues={initialValues}
+        tags={tags}
         type="UPDATE"
       />
     </>

@@ -1,4 +1,4 @@
-import { ArticleWithTag } from '@/api/article/type'
+import { ArticleWithTag, Tag } from '@/api/article/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
 
 const { Option } = Select
@@ -17,6 +17,7 @@ interface ArticleModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<ArticleModalProps['isModalOpen']>>
   search: () => void
   initialValues?: ArticleWithTag
+  tags: Tag[]
   type: 'UPDATE' | 'CREATE'
 }
 
@@ -25,7 +26,7 @@ interface FormItem {
   label: string
 }
 
-const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen, initialValues }) => {
+const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen, initialValues, tags }) => {
   const handleOk = () => {
     setIsModalOpen(false)
   }
@@ -44,8 +45,7 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen
   const formItems: FormItem[] = [
     { name: 'title', label: 'Title' },
     { name: 'author', label: 'Author' },
-    { name: 'description', label: 'Description' },
-    { name: 'tags', label: 'Tags' }
+    { name: 'description', label: 'Description' }
   ]
 
   const handleChange = (value: string[]) => {
@@ -69,14 +69,13 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen
             </Form.Item>
           ))}
           <Form.Item name="tags" label="Tags" rules={[{ required: true }]}>
-            <Select
-              mode="tags"
-              allowClear
-              placeholder="Please select"
-              defaultValue={initialValues?.tags.map((tag) => tag.name)}
-              onChange={handleChange}
-              options={initialValues?.tags}
-            />
+            <Select mode="tags" allowClear placeholder="Please select" onChange={handleChange}>
+              {tags?.map((tag) => (
+                <Select.Option key={tag.id} value={tag.name}>
+                  {tag.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item name="isFeatured" label="IsFeatured" rules={[{ required: true }]}>
             <Select placeholder="Select a option and change input text above" allowClear>
