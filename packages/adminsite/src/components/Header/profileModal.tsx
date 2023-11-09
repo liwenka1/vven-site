@@ -45,7 +45,12 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isModalOpen, setIsModalOpen
   return (
     <>
       <Modal title="Profile" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-        <Avatar className="cursor-pointer my-5 w-20 h-20" icon={<UserOutlined />} src={profile?.avatarUrl} size="large" />
+        <Avatar
+          className="cursor-pointer my-5 w-20 h-20"
+          icon={<UserOutlined />}
+          src={profile?.avatarUrl}
+          size="large"
+        />
         <Descriptions className="my-5" bordered items={items} size="small" column={1} />
       </Modal>
     </>

@@ -1,0 +1,17 @@
+.editorPage > div {
+  height: 100%;
+
+  .bytemd {
+    height: 100%;
+  }
+}
+
+.emoji-container {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  z-index: 999;
+}
+.emoji-categories {
+  background-color: gray;
+}

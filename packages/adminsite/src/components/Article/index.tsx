@@ -34,12 +34,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({ type }) => {
 
   return (
     <>
-      <ArticleSearchBar
-        search={search}
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
-        tags={tags}
-      />
+      <ArticleSearchBar search={search} searchParams={searchParams} setSearchParams={setSearchParams} tags={tags} />
       <ArticleTableBar
         article={article}
         search={search}
