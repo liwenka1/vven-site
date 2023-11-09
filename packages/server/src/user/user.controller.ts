@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Request, UploadedFile, UseGuards, UseInter
 import { UserService } from './user.service'
 import {
   UserCreateOrUpdateFilters,
+  UserDeleteFilters,
   UserRegisterParams,
   UserResetParams,
   UserSearchFilters,
@@ -55,7 +56,7 @@ export class UserController {
   }
 
   @Post('delete')
-  delete(@Body() params: { id: number }): Promise<void> {
+  delete(@Body() params: UserDeleteFilters): Promise<void> {
     return this.userService.delete(params)
   }
 

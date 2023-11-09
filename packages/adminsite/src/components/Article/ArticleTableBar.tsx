@@ -1,15 +1,16 @@
-import { Article, ArticleSearchFilters, ArticleWithTag, Tag } from '@/api/article/type'
+import { Article, ArticleSearchFiltersWithTag, ArticleWithTag, Tag } from '@/api/article/type'
 import { Space, Table, Tag as AntdTag, Button, Popconfirm } from 'antd'
 import { TableProps } from 'antd/lib'
 import { useState } from 'react'
 import ArticleModal from './ArticleModal'
+import { articleApi } from '@/api/article'
 
 const { Column } = Table
 
 interface ArticleTableBarProps {
   article: ArticleWithTag[]
   search: () => void
-  searchParams: ArticleSearchFilters
+  searchParams: ArticleSearchFiltersWithTag
   setSearchParams: React.Dispatch<React.SetStateAction<ArticleTableBarProps['searchParams']>>
   tags: Tag[]
 }
@@ -25,12 +26,11 @@ const ArticleTableBar: React.FC<ArticleTableBarProps> = ({ article, search, sear
       } else {
         setSearchParams({ ...searchParams, orderBy: undefined })
       }
-      search()
     }
   }
 
   const confirm = async (article: ArticleWithTag) => {
-    console.log(article, 'article')
+    await articleApi.delete({ id: article.id })
     search()
   }
   const cancel = () => {
@@ -40,7 +40,6 @@ const ArticleTableBar: React.FC<ArticleTableBarProps> = ({ article, search, sear
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [initialValues, setInitialValues] = useState<ArticleWithTag>()
   const showModal = (article: ArticleWithTag) => {
-    console.log(article, 'article')
     setInitialValues(article)
     setIsModalOpen(true)
   }
@@ -63,11 +62,11 @@ const ArticleTableBar: React.FC<ArticleTableBarProps> = ({ article, search, sear
           title="Tags"
           dataIndex="tags"
           key="tags"
-          render={(tags: Tag[]) => (
+          render={(tags: string[]) => (
             <>
               {tags.map((tag) => (
-                <AntdTag color="blue" key={tag.id}>
-                  {tag.name}
+                <AntdTag color="blue" key={tag}>
+                  {tag}
                 </AntdTag>
               ))}
             </>

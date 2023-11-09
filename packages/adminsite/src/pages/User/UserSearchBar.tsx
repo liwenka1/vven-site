@@ -74,10 +74,8 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ search, searchParams, set
   }
 
   const onFinish = (values: unknown) => {
-    console.log('Received values of form: ', values)
     const params = values as UserSearchFilters
     setSearchParams({ ...searchParams, ...params })
-    search()
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)

@@ -16,7 +16,7 @@ interface UserTableBarProps {
 
 const UserTableBar: React.FC<UserTableBarProps> = ({ users, search, searchParams, setSearchParams }) => {
   const confirm = async (user: UserWithoutPassword) => {
-    await userApi.delete(user)
+    await userApi.delete({ id: user.id })
     search()
   }
 
@@ -27,8 +27,6 @@ const UserTableBar: React.FC<UserTableBarProps> = ({ users, search, searchParams
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [initialValues, setInitialValues] = useState<UserWithoutPassword>()
   const showModal = (user: UserWithoutPassword) => {
-    console.log(user, 'user')
-
     setInitialValues(user)
     setIsModalOpen(true)
   }
@@ -42,7 +40,6 @@ const UserTableBar: React.FC<UserTableBarProps> = ({ users, search, searchParams
       } else {
         setSearchParams({ ...searchParams, orderBy: undefined })
       }
-      search()
     }
   }
 

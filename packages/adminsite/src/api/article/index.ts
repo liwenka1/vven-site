@@ -1,22 +1,22 @@
 import { http } from '@/utils/request'
 import {
   ArticleWithTag,
-  ArticleSearchFilters,
-  ArticleCreateOrUpdateFilters,
   ArticleDeleteFilters,
   Tag,
-  TagSearchFilters
+  TagSearchFilters,
+  ArticleSearchFiltersWithTag,
+  ArticleCreateOrUpdateFiltersWithTag
 } from './type'
 import { ResponseData } from '@/type'
 
 export const articleApi = {
-  search: (params: ArticleSearchFilters) => {
+  search: (params?: ArticleSearchFiltersWithTag) => {
     return http.post<ResponseData<ArticleWithTag[]>>('/article/articleSearch', params)
   },
-  create: (params: ArticleCreateOrUpdateFilters) => {
+  create: (params: ArticleCreateOrUpdateFiltersWithTag) => {
     return http.post<ResponseData<void>>('article/articleCreate', params)
   },
-  update: (params: ArticleCreateOrUpdateFilters & { id: number }) => {
+  update: (params: ArticleCreateOrUpdateFiltersWithTag & { id: number }) => {
     return http.post<ResponseData<void>>('article/articleUpdate', params)
   },
   delete: (params: ArticleDeleteFilters) => {

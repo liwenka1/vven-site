@@ -3,7 +3,7 @@ import { ArticleService } from './article.service'
 import {
   ArticleCreateOrUpdateFiltersWithTag,
   ArticleDeleteFilters,
-  ArticleSearchFilters,
+  ArticleSearchFiltersWithTag,
   ArticleWithTag,
   TagSearchFilters
 } from './article.dto'
@@ -14,7 +14,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post('articleSearch')
-  articleSearch(@Body() params: ArticleSearchFilters): Promise<ArticleWithTag[]> {
+  articleSearch(@Body() params: ArticleSearchFiltersWithTag): Promise<ArticleWithTag[]> {
     return this.articleService.articleSearch(params)
   }
 

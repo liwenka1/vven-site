@@ -9,6 +9,10 @@ interface OrderBy {
   }
 }
 
+interface Tags {
+  tags: string[]
+}
+
 export type ArticleSearchFilters = Partial<Article & OrderBy>
 
 export type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createTime'>>
@@ -25,6 +29,8 @@ export type ArticleTagSearchFilters = Partial<ArticleTag>
 
 export type ArticleTagCreateOrUpdateFilters = Omit<ArticleTag, 'id'>
 
-export type ArticleWithTag = Article & { tags: Tag[] }
+export type ArticleWithTag = Article & Tags
 
-export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & { tags: TagSearchFilters[] }
+export type ArticleSearchFiltersWithTag = ArticleSearchFilters & Partial<Tags>
+
+export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & Partial<Tags>

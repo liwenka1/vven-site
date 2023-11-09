@@ -1,5 +1,5 @@
 import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd'
-import { ArticleSearchFilters, Tag } from '@/api/article/type'
+import { ArticleSearchFiltersWithTag, Tag } from '@/api/article/type'
 import { useState } from 'react'
 import ArticleModal from './ArticleModal'
 
@@ -7,7 +7,7 @@ const { Option } = Select
 
 interface ArticleSearchBarProps {
   search: () => void
-  searchParams: ArticleSearchFilters
+  searchParams: ArticleSearchFiltersWithTag
   setSearchParams: React.Dispatch<React.SetStateAction<ArticleSearchBarProps['searchParams']>>
   tags: Tag[]
 }
@@ -17,7 +17,7 @@ interface FormItem {
   label: string
 }
 
-const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => {
+const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, searchParams, setSearchParams, tags }) => {
   const { token } = theme.useToken()
   const [form] = Form.useForm()
 
@@ -64,16 +64,16 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
               }
             ]}
           >
-            <Select allowClear>
-              <Option value="true">是</Option>
-              <Option value="false">否</Option>
+            <Select placeholder="Select a option and change input text above" allowClear>
+              <Option value={true}>是</Option>
+              <Option value={false}>否</Option>
             </Select>
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item
-            name="tag"
-            label="Tag"
+            name="tags"
+            label="Tags"
             rules={[
               {
                 required: false,
@@ -81,9 +81,9 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
               }
             ]}
           >
-            <Select allowClear>
+            <Select mode="tags" allowClear placeholder="Please select">
               {tags.map((tag) => (
-                <Option value={tag.id} key={tag.id}>
+                <Option key={tag.id} value={tag.name}>
                   {tag.name}
                 </Option>
               ))}
@@ -95,7 +95,8 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
   }
 
   const onFinish = (values: unknown) => {
-    console.log('Received values of form: ', values)
+    const params = values as ArticleSearchFiltersWithTag
+    setSearchParams({ ...searchParams, ...params })
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -126,7 +127,13 @@ const ArticleSearchBar: React.FC<ArticleSearchBarProps> = ({ search, tags }) => 
           </Space>
         </div>
       </Form>
-      <ArticleModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} search={search} type="CREATE" />
+      <ArticleModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        search={search}
+        tags={tags}
+        type="CREATE"
+      />
     </>
   )
 }

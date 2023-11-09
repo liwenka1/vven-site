@@ -1,4 +1,7 @@
-import { ArticleWithTag, Tag } from '@/api/article/type'
+import { articleApi } from '@/api/article'
+import { ArticleCreateOrUpdateFiltersWithTag, ArticleWithTag, Tag } from '@/api/article/type'
+import useMessageApi from '@/hooks/useMessageApi '
+import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
 
 const { Option } = Select
@@ -26,7 +29,14 @@ interface FormItem {
   label: string
 }
 
-const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen, initialValues, tags }) => {
+const ArticleModal: React.FC<ArticleModalProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  search,
+  initialValues,
+  tags,
+  type
+}) => {
   const handleOk = () => {
     setIsModalOpen(false)
   }
@@ -36,8 +46,25 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen
   }
 
   const [form] = Form.useForm()
+  const { contextHolder, warning, success } = useMessageApi()
   const onFinish = async (values: unknown) => {
-    console.log(values)
+    const params = values as ArticleCreateOrUpdateFiltersWithTag
+    try {
+      if (type === 'CREATE') {
+        await articleApi.create(params)
+        success('添加成功！')
+      } else if (type === 'UPDATE') {
+        if (initialValues) {
+          await articleApi.update({ id: initialValues.id, ...params })
+          success('修改成功！')
+        }
+      }
+      setIsModalOpen(false)
+      search()
+    } catch (error) {
+      const customError = error as ResponseData<null>
+      warning(customError.message)
+    }
   }
   const onReset = () => {
     form.resetFields()
@@ -48,12 +75,9 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen
     { name: 'description', label: 'Description' }
   ]
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`)
-  }
-
   return (
     <>
+      {contextHolder}
       <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={600}>
         <Form
           {...layout}
@@ -69,12 +93,18 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ isModalOpen, setIsModalOpen
             </Form.Item>
           ))}
           <Form.Item name="tags" label="Tags" rules={[{ required: true }]}>
-            <Select mode="tags" allowClear placeholder="Please select" onChange={handleChange}>
+            <Select mode="tags" allowClear placeholder="Please select">
               {tags?.map((tag) => (
                 <Select.Option key={tag.id} value={tag.name}>
                   {tag.name}
                 </Select.Option>
               ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="isDraft" label="IsDraft" rules={[{ required: true }]}>
+            <Select placeholder="Select a option and change input text above" allowClear>
+              <Option value={true}>是</Option>
+              <Option value={false}>否</Option>
             </Select>
           </Form.Item>
           <Form.Item name="isFeatured" label="IsFeatured" rules={[{ required: true }]}>

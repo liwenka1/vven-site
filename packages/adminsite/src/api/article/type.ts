@@ -28,12 +28,20 @@ interface OrderBy {
   }
 }
 
-export type ArticleSearchFilters = Partial<Article & OrderBy>
+interface Tags {
+  tags: string[]
+}
 
-export type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createTime' | 'updateTime'>>
+type ArticleSearchFilters = Partial<Article & OrderBy>
+
+type ArticleCreateOrUpdateFilters = Partial<Omit<Article, 'id' | 'createTime' | 'updateTime'>>
 
 export type ArticleDeleteFilters = Pick<Article, 'id'>
 
 export type TagSearchFilters = Partial<Tag>
 
-export type ArticleWithTag = Article & { tags: Tag[] }
+export type ArticleWithTag = Article & Tags
+
+export type ArticleSearchFiltersWithTag = ArticleSearchFilters & Partial<Tags>
+
+export type ArticleCreateOrUpdateFiltersWithTag = ArticleCreateOrUpdateFilters & Partial<Tags>
