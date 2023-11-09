@@ -53,6 +53,10 @@ const routes: RouteObject[] = [
         element: lazyLoad(lazy(() => import('@/pages/Article')))
       },
       {
+        path: 'editor',
+        element: lazyLoad(lazy(() => import('@/components/EditorPage')))
+      },
+      {
         path: 'comment',
         element: lazyLoad(lazy(() => import('@/pages/Comment')))
       },

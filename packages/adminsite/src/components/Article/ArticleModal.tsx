@@ -3,6 +3,7 @@ import { ArticleCreateOrUpdateFiltersWithTag, ArticleWithTag, Tag } from '@/api/
 import useMessageApi from '@/hooks/useMessageApi '
 import { ResponseData } from '@/type'
 import { Modal, Button, Form, Input, Select, Space } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const { Option } = Select
 
@@ -47,12 +48,14 @@ const ArticleModal: React.FC<ArticleModalProps> = ({
 
   const [form] = Form.useForm()
   const { contextHolder, warning, success } = useMessageApi()
+  const navigate = useNavigate()
   const onFinish = async (values: unknown) => {
     const params = values as ArticleCreateOrUpdateFiltersWithTag
     try {
       if (type === 'CREATE') {
         await articleApi.create(params)
         success('添加成功！')
+        navigate('/editor')
       } else if (type === 'UPDATE') {
         if (initialValues) {
           await articleApi.update({ id: initialValues.id, ...params })

@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@bytemd/plugin-gfm": "^1.21.0",
+    "@bytemd/react": "^1.21.0",
     "antd": "^5.9.4",
     "axios": "^1.5.1",
     "clsx": "^2.0.0",
