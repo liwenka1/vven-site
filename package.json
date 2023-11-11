@@ -5,7 +5,8 @@
 		"dev:server": "lerna run start:dev --scope @vvensite/server",
 		"dev:hot:server": "lerna run start:dev:hot --scope @vvensite/server",
 		"dev:website": "lerna run dev --scope @vvensite/website",
-		"dev:adminsite": "lerna run dev --scope @vvensite/adminsite"
+		"dev:adminsite": "lerna run dev --scope @vvensite/adminsite",
+		"dev:admin": "lerna run dev --scope @vvensite/admin"
 	},
 	"dependencies": {},
 	"devDependencies": {
