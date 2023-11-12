@@ -2,27 +2,27 @@
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
-};
+  clear: jest.fn()
+}
 
-global.localStorage = localStorageMock;
+global.localStorage = localStorageMock
 
 Object.defineProperty(URL, 'createObjectURL', {
   writable: true,
-  value: jest.fn(),
-});
+  value: jest.fn()
+})
 
 class Worker {
   constructor(stringUrl) {
-    this.url = stringUrl;
-    this.onmessage = () => {};
+    this.url = stringUrl
+    this.onmessage = () => {}
   }
 
   postMessage(msg) {
-    this.onmessage(msg);
+    this.onmessage(msg)
   }
 }
-window.Worker = Worker;
+window.Worker = Worker
 
 /* eslint-disable global-require */
 if (typeof window !== 'undefined') {
@@ -34,9 +34,9 @@ if (typeof window !== 'undefined') {
       value: jest.fn(() => ({
         matches: false,
         addListener: jest.fn(),
-        removeListener: jest.fn(),
-      })),
-    });
+        removeListener: jest.fn()
+      }))
+    })
   }
   if (!window.matchMedia) {
     Object.defineProperty(global.window, 'matchMedia', {
@@ -45,20 +45,20 @@ if (typeof window !== 'undefined') {
       value: jest.fn((query) => ({
         matches: query.includes('max-width'),
         addListener: jest.fn(),
-        removeListener: jest.fn(),
-      })),
-    });
+        removeListener: jest.fn()
+      }))
+    })
   }
 }
-const errorLog = console.error;
+const errorLog = console.error
 Object.defineProperty(global.window.console, 'error', {
   writable: true,
   configurable: true,
   value: (...rest) => {
-    const logStr = rest.join('');
+    const logStr = rest.join('')
     if (logStr.includes('Warning: An update to %s inside a test was not wrapped in act(...)')) {
-      return;
+      return
     }
-    errorLog(...rest);
-  },
-});
+    errorLog(...rest)
+  }
+})

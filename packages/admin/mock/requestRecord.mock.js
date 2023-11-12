@@ -14,18 +14,18 @@ module.exports = {
         { key: '2', label: '辣~' },
         { key: '3', label: '大长腿' },
         { key: '4', label: '川妹子' },
-        { key: '5', label: '海纳百川' },
+        { key: '5', label: '海纳百川' }
       ],
       notifyCount: 12,
       unreadCount: 11,
       country: 'China',
       geographic: {
         province: { label: '浙江省', key: '330000' },
-        city: { label: '杭州市', key: '330100' },
+        city: { label: '杭州市', key: '330100' }
       },
       address: '西湖区工专路 77 号',
-      phone: '0752-268888888',
-    },
+      phone: '0752-268888888'
+    }
   },
   'GET /api/rule': {
     data: [
@@ -41,7 +41,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 81,
+        progress: 81
       },
       {
         key: 98,
@@ -55,7 +55,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 12,
+        progress: 12
       },
       {
         key: 97,
@@ -69,7 +69,7 @@ module.exports = {
         status: '1',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 81,
+        progress: 81
       },
       {
         key: 96,
@@ -83,7 +83,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 7,
+        progress: 7
       },
       {
         key: 95,
@@ -97,7 +97,7 @@ module.exports = {
         status: '2',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 82,
+        progress: 82
       },
       {
         key: 94,
@@ -111,7 +111,7 @@ module.exports = {
         status: '1',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 14,
+        progress: 14
       },
       {
         key: 93,
@@ -125,7 +125,7 @@ module.exports = {
         status: '2',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 77,
+        progress: 77
       },
       {
         key: 92,
@@ -139,7 +139,7 @@ module.exports = {
         status: '3',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 58,
+        progress: 58
       },
       {
         key: 91,
@@ -153,7 +153,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 66,
+        progress: 66
       },
       {
         key: 90,
@@ -167,7 +167,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 72,
+        progress: 72
       },
       {
         key: 89,
@@ -181,7 +181,7 @@ module.exports = {
         status: '2',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 2,
+        progress: 2
       },
       {
         key: 88,
@@ -195,7 +195,7 @@ module.exports = {
         status: '1',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 12,
+        progress: 12
       },
       {
         key: 87,
@@ -209,7 +209,7 @@ module.exports = {
         status: '1',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 82,
+        progress: 82
       },
       {
         key: 86,
@@ -223,7 +223,7 @@ module.exports = {
         status: '3',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 22,
+        progress: 22
       },
       {
         key: 85,
@@ -237,7 +237,7 @@ module.exports = {
         status: '3',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 12,
+        progress: 12
       },
       {
         key: 84,
@@ -251,7 +251,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 79,
+        progress: 79
       },
       {
         key: 83,
@@ -265,7 +265,7 @@ module.exports = {
         status: '2',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 59,
+        progress: 59
       },
       {
         key: 82,
@@ -279,7 +279,7 @@ module.exports = {
         status: '0',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 100,
+        progress: 100
       },
       {
         key: 81,
@@ -293,7 +293,7 @@ module.exports = {
         status: '3',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 61,
+        progress: 61
       },
       {
         key: 80,
@@ -307,18 +307,18 @@ module.exports = {
         status: '2',
         updatedAt: '2022-12-06T05:00:57.040Z',
         createdAt: '2022-12-06T05:00:57.040Z',
-        progress: 20,
-      },
+        progress: 20
+      }
     ],
     total: 100,
     success: true,
     pageSize: 20,
-    current: 1,
+    current: 1
   },
   'POST /api/login/outLogin': { data: {}, success: true },
   'POST /api/login/account': {
     status: 'ok',
     type: 'account',
-    currentAuthority: 'admin',
-  },
-};
+    currentAuthority: 'admin'
+  }
+}

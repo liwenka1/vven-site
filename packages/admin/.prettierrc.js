@@ -1,21 +1,24 @@
 module.exports = {
+  printWidth: 120,
+  tabWidth: 2,
+  useTabs: false,
   singleQuote: true,
-  trailingComma: 'all',
-  printWidth: 100,
-  proseWrap: 'never',
+  semi: false,
+  trailingComma: 'none',
+  bracketSpacing: true,
   endOfLine: 'lf',
   overrides: [
     {
       files: '.prettierrc',
       options: {
-        parser: 'json',
-      },
+        parser: 'json'
+      }
     },
     {
       files: 'document.ejs',
       options: {
-        parser: 'html',
-      },
-    },
-  ],
-};
+        parser: 'html'
+      }
+    }
+  ]
+}

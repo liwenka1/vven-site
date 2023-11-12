@@ -1,6 +1,6 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
-import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
+import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api'
+import { PlusOutlined } from '@ant-design/icons'
+import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components'
 import {
   FooterToolbar,
   ModalForm,
@@ -8,13 +8,13 @@ import {
   ProDescriptions,
   ProFormText,
   ProFormTextArea,
-  ProTable,
-} from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
-import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
+  ProTable
+} from '@ant-design/pro-components'
+import { FormattedMessage, useIntl } from '@umijs/max'
+import { Button, Drawer, Input, message } from 'antd'
+import React, { useRef, useState } from 'react'
+import type { FormValueType } from './components/UpdateForm'
+import UpdateForm from './components/UpdateForm'
 
 /**
  * @en-US Add node
@@ -22,18 +22,18 @@ import UpdateForm from './components/UpdateForm';
  * @param fields
  */
 const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
+  const hide = message.loading('正在添加')
   try {
-    await addRule({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
+    await addRule({ ...fields })
+    hide()
+    message.success('Added successfully')
+    return true
   } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
+    hide()
+    message.error('Adding failed, please try again!')
+    return false
   }
-};
+}
 
 /**
  * @en-US Update node
@@ -42,23 +42,23 @@ const handleAdd = async (fields: API.RuleListItem) => {
  * @param fields
  */
 const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
+  const hide = message.loading('Configuring')
   try {
     await updateRule({
       name: fields.name,
       desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
+      key: fields.key
+    })
+    hide()
 
-    message.success('Configuration is successful');
-    return true;
+    message.success('Configuration is successful')
+    return true
   } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
+    hide()
+    message.error('Configuration failed, please try again!')
+    return false
   }
-};
+}
 
 /**
  *  Delete node
@@ -67,89 +67,79 @@ const handleUpdate = async (fields: FormValueType) => {
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.RuleListItem[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+  const hide = message.loading('正在删除')
+  if (!selectedRows) return true
   try {
     await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
+      key: selectedRows.map((row) => row.key)
+    })
+    hide()
+    message.success('Deleted successfully and will refresh soon')
+    return true
   } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
+    hide()
+    message.error('Delete failed, please try again')
+    return false
   }
-};
+}
 
 const TableList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
    *  */
-  const [createModalOpen, handleModalOpen] = useState<boolean>(false);
+  const [createModalOpen, handleModalOpen] = useState<boolean>(false)
   /**
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
-  const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false)
 
-  const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [showDetail, setShowDetail] = useState<boolean>(false)
 
-  const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const actionRef = useRef<ActionType>()
+  const [currentRow, setCurrentRow] = useState<API.RuleListItem>()
+  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([])
 
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
-  const intl = useIntl();
+  const intl = useIntl()
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.updateForm.ruleName.nameLabel"
-          defaultMessage="Rule name"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.updateForm.ruleName.nameLabel" defaultMessage="Rule name" />,
       dataIndex: 'name',
       tip: 'The rule name is the unique key',
       render: (dom, entity) => {
         return (
           <a
             onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
+              setCurrentRow(entity)
+              setShowDetail(true)
             }}
           >
             {dom}
           </a>
-        );
-      },
+        )
+      }
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleDesc" defaultMessage="Description" />,
       dataIndex: 'desc',
-      valueType: 'textarea',
+      valueType: 'textarea'
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.titleCallNo"
-          defaultMessage="Number of service calls"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.titleCallNo" defaultMessage="Number of service calls" />,
       dataIndex: 'callNo',
       sorter: true,
       hideInForm: true,
       renderText: (val: string) =>
         `${val}${intl.formatMessage({
           id: 'pages.searchTable.tenThousand',
-          defaultMessage: ' 万 ',
-        })}`,
+          defaultMessage: ' 万 '
+        })}`
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
@@ -157,51 +147,32 @@ const TableList: React.FC = () => {
       hideInForm: true,
       valueEnum: {
         0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
-          status: 'Default',
+          text: <FormattedMessage id="pages.searchTable.nameStatus.default" defaultMessage="Shut down" />,
+          status: 'Default'
         },
         1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
-          ),
-          status: 'Processing',
+          text: <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />,
+          status: 'Processing'
         },
         2: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
-          ),
-          status: 'Success',
+          text: <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />,
+          status: 'Success'
         },
         3: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.abnormal"
-              defaultMessage="Abnormal"
-            />
-          ),
-          status: 'Error',
-        },
-      },
+          text: <FormattedMessage id="pages.searchTable.nameStatus.abnormal" defaultMessage="Abnormal" />,
+          status: 'Error'
+        }
+      }
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.titleUpdatedAt"
-          defaultMessage="Last scheduled time"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.titleUpdatedAt" defaultMessage="Last scheduled time" />,
       sorter: true,
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
+        const status = form.getFieldValue('status')
         if (`${status}` === '0') {
-          return false;
+          return false
         }
         if (`${status}` === '3') {
           return (
@@ -209,13 +180,13 @@ const TableList: React.FC = () => {
               {...rest}
               placeholder={intl.formatMessage({
                 id: 'pages.searchTable.exception',
-                defaultMessage: 'Please enter the reason for the exception!',
+                defaultMessage: 'Please enter the reason for the exception!'
               })}
             />
-          );
+          )
         }
-        return defaultRender(item);
-      },
+        return defaultRender(item)
+      }
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
@@ -225,51 +196,48 @@ const TableList: React.FC = () => {
         <a
           key="config"
           onClick={() => {
-            handleUpdateModalOpen(true);
-            setCurrentRow(record);
+            handleUpdateModalOpen(true)
+            setCurrentRow(record)
           }}
         >
           <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
         </a>,
         <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
-        </a>,
-      ],
-    },
-  ];
+          <FormattedMessage id="pages.searchTable.subscribeAlert" defaultMessage="Subscribe to alerts" />
+        </a>
+      ]
+    }
+  ]
 
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
+          defaultMessage: 'Enquiry form'
         })}
         actionRef={actionRef}
         rowKey="key"
         search={{
-          labelWidth: 120,
+          labelWidth: 120
         }}
         toolBarRender={() => [
           <Button
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalOpen(true);
+              handleModalOpen(true)
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
-          </Button>,
+          </Button>
         ]}
         request={rule}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
+            setSelectedRows(selectedRows)
+          }
         }}
       />
       {selectedRowsState?.length > 0 && (
@@ -293,38 +261,32 @@ const TableList: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
+              await handleRemove(selectedRowsState)
+              setSelectedRows([])
+              actionRef.current?.reloadAndRest?.()
             }}
           >
-            <FormattedMessage
-              id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
-            />
+            <FormattedMessage id="pages.searchTable.batchDeletion" defaultMessage="Batch deletion" />
           </Button>
           <Button type="primary">
-            <FormattedMessage
-              id="pages.searchTable.batchApproval"
-              defaultMessage="Batch approval"
-            />
+            <FormattedMessage id="pages.searchTable.batchApproval" defaultMessage="Batch approval" />
           </Button>
         </FooterToolbar>
       )}
       <ModalForm
         title={intl.formatMessage({
           id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
+          defaultMessage: 'New rule'
         })}
         width="400px"
         open={createModalOpen}
         onOpenChange={handleModalOpen}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
+          const success = await handleAdd(value as API.RuleListItem)
           if (success) {
-            handleModalOpen(false);
+            handleModalOpen(false)
             if (actionRef.current) {
-              actionRef.current.reload();
+              actionRef.current.reload()
             }
           }
         }}
@@ -333,13 +295,8 @@ const TableList: React.FC = () => {
           rules={[
             {
               required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
+              message: <FormattedMessage id="pages.searchTable.ruleName" defaultMessage="Rule name is required" />
+            }
           ]}
           width="md"
           name="name"
@@ -348,19 +305,19 @@ const TableList: React.FC = () => {
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
-          const success = await handleUpdate(value);
+          const success = await handleUpdate(value)
           if (success) {
-            handleUpdateModalOpen(false);
-            setCurrentRow(undefined);
+            handleUpdateModalOpen(false)
+            setCurrentRow(undefined)
             if (actionRef.current) {
-              actionRef.current.reload();
+              actionRef.current.reload()
             }
           }
         }}
         onCancel={() => {
-          handleUpdateModalOpen(false);
+          handleUpdateModalOpen(false)
           if (!showDetail) {
-            setCurrentRow(undefined);
+            setCurrentRow(undefined)
           }
         }}
         updateModalOpen={updateModalOpen}
@@ -371,8 +328,8 @@ const TableList: React.FC = () => {
         width={600}
         open={showDetail}
         onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
+          setCurrentRow(undefined)
+          setShowDetail(false)
         }}
         closable={false}
       >
@@ -381,17 +338,17 @@ const TableList: React.FC = () => {
             column={2}
             title={currentRow?.name}
             request={async () => ({
-              data: currentRow || {},
+              data: currentRow || {}
             })}
             params={{
-              id: currentRow?.name,
+              id: currentRow?.name
             }}
             columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
           />
         )}
       </Drawer>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default TableList;
+export default TableList

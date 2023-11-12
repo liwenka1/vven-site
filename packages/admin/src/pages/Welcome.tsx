@@ -1,7 +1,7 @@
-import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
-import React from 'react';
+import { PageContainer } from '@ant-design/pro-components'
+import { useModel } from '@umijs/max'
+import { Card, theme } from 'antd'
+import React from 'react'
 
 /**
  * 每个单独的卡片，为了复用样式抽成了组件
@@ -9,14 +9,14 @@ import React from 'react';
  * @returns
  */
 const InfoCard: React.FC<{
-  title: string;
-  index: number;
-  desc: string;
-  href: string;
+  title: string
+  index: number
+  desc: string
+  href: string
 }> = ({ title, href, index, desc }) => {
-  const { useToken } = theme;
+  const { useToken } = theme
 
-  const { token } = useToken();
+  const { token } = useToken()
 
   return (
     <div
@@ -29,14 +29,14 @@ const InfoCard: React.FC<{
         lineHeight: '22px',
         padding: '16px 19px',
         minWidth: '220px',
-        flex: 1,
+        flex: 1
       }}
     >
       <div
         style={{
           display: 'flex',
           gap: '4px',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <div
@@ -49,8 +49,7 @@ const InfoCard: React.FC<{
             padding: '8px 16px 16px 12px',
             color: '#FFF',
             fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
+            backgroundImage: "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')"
           }}
         >
           {index}
@@ -59,7 +58,7 @@ const InfoCard: React.FC<{
           style={{
             fontSize: '16px',
             color: token.colorText,
-            paddingBottom: 8,
+            paddingBottom: 8
           }}
         >
           {title}
@@ -71,7 +70,7 @@ const InfoCard: React.FC<{
           color: token.colorTextSecondary,
           textAlign: 'justify',
           lineHeight: '22px',
-          marginBottom: 8,
+          marginBottom: 8
         }}
       >
         {desc}
@@ -80,23 +79,23 @@ const InfoCard: React.FC<{
         了解更多 {'>'}
       </a>
     </div>
-  );
-};
+  )
+}
 
 const Welcome: React.FC = () => {
-  const { token } = theme.useToken();
-  const { initialState } = useModel('@@initialState');
+  const { token } = theme.useToken()
+  const { initialState } = useModel('@@initialState')
   return (
     <PageContainer>
       <Card
         style={{
-          borderRadius: 8,
+          borderRadius: 8
         }}
         bodyStyle={{
           backgroundImage:
             initialState?.settings?.navTheme === 'realDark'
               ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-              : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
+              : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)'
         }}
       >
         <div
@@ -105,13 +104,13 @@ const Welcome: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundSize: '274px auto',
             backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')"
           }}
         >
           <div
             style={{
               fontSize: '20px',
-              color: token.colorTextHeading,
+              color: token.colorTextHeading
             }}
           >
             欢迎使用 Ant Design Pro
@@ -123,7 +122,7 @@ const Welcome: React.FC = () => {
               lineHeight: '22px',
               marginTop: 16,
               marginBottom: 32,
-              width: '65%',
+              width: '65%'
             }}
           >
             Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
@@ -133,7 +132,7 @@ const Welcome: React.FC = () => {
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: 16,
+              gap: 16
             }}
           >
             <InfoCard
@@ -158,7 +157,7 @@ const Welcome: React.FC = () => {
         </div>
       </Card>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default Welcome;
+export default Welcome

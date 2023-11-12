@@ -18,15 +18,15 @@ export default [
       {
         name: 'login',
         path: '/user/login',
-        component: './User/Login',
-      },
-    ],
+        component: './User/Login'
+      }
+    ]
   },
   {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
-    component: './Welcome',
+    component: './Welcome'
   },
   {
     path: '/admin',
@@ -36,28 +36,28 @@ export default [
     routes: [
       {
         path: '/admin',
-        redirect: '/admin/sub-page',
+        redirect: '/admin/sub-page'
       },
       {
         path: '/admin/sub-page',
         name: 'sub-page',
-        component: './Admin',
-      },
-    ],
+        component: './Admin'
+      }
+    ]
   },
   {
     name: 'list.table-list',
     icon: 'table',
     path: '/list',
-    component: './TableList',
+    component: './TableList'
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/welcome'
   },
   {
     path: '*',
     layout: false,
-    component: './404',
-  },
-];
+    component: './404'
+  }
+]
