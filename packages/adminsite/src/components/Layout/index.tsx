@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Button, Dropdown } from 'antd'
-import { PageContainer, ProCard, ProLayout, SettingDrawer } from '@ant-design/pro-components'
+import { PageContainer, ProCard, ProLayout } from '@ant-design/pro-components'
 import { GithubFilled, InfoCircleFilled, QuestionCircleFilled } from '@ant-design/icons'
 import type { ProSettings } from '@ant-design/pro-components'
 import type { MenuProps } from 'antd'
@@ -12,7 +12,11 @@ import useUserInfoStore from '@/stores/userInfo'
 // const { Header, Sider, Content } = Layout
 
 const BasicLayout = () => {
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(undefined)
+  const settings: ProSettings | undefined = {
+    fixSiderbar: true,
+    layout: 'mix',
+    splitMenus: false
+  }
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -144,17 +148,6 @@ const BasicLayout = () => {
           </ProCard>
         </PageContainer>
       </ProLayout>
-      <SettingDrawer
-        pathname={pathname}
-        enableDarkTheme
-        getContainer={() => document.getElementById('ant-pro-layout')}
-        settings={settings}
-        onSettingChange={(changeSetting) => {
-          setSetting(changeSetting)
-        }}
-        disableUrlParams={false}
-        hideHintAlert
-      />
     </div>
   )
 }
