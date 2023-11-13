@@ -1,38 +1,12 @@
+import { userApi } from '@/api/user'
+import { UserWithoutPassword } from '@/api/user/type'
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable, TableDropdown } from '@ant-design/pro-components'
 import { Button, Dropdown, Space, Tag } from 'antd'
 import { useRef } from 'react'
-import request from 'umi-request'
-const waitTimePromise = async (time = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, time)
-  })
-}
 
-const waitTime = async (time = 100) => {
-  await waitTimePromise(time)
-}
-
-type GithubIssueItem = {
-  url: string
-  id: number
-  number: number
-  title: string
-  labels: {
-    name: string
-    color: string
-  }[]
-  state: string
-  comments: number
-  created_at: string
-  updated_at: string
-  closed_at?: string
-}
-
-const columns: ProColumns<GithubIssueItem>[] = [
+const columns: ProColumns<UserWithoutPassword>[] = [
   {
     dataIndex: 'index',
     valueType: 'indexBorder',
@@ -77,24 +51,6 @@ const columns: ProColumns<GithubIssueItem>[] = [
         status: 'Processing'
       }
     }
-  },
-  {
-    disable: true,
-    title: '标签',
-    dataIndex: 'labels',
-    search: false,
-    renderFormItem: (_, { defaultRender }) => {
-      return defaultRender(_)
-    },
-    render: (_, record) => (
-      <Space>
-        {record.labels.map(({ name, color }) => (
-          <Tag color={color} key={name}>
-            {name}
-          </Tag>
-        ))}
-      </Space>
-    )
   },
   {
     title: '创建时间',
@@ -149,18 +105,18 @@ const columns: ProColumns<GithubIssueItem>[] = [
 const Comment = () => {
   const actionRef = useRef<ActionType>()
   return (
-    <ProTable<GithubIssueItem>
+    <ProTable<UserWithoutPassword>
       columns={columns}
       actionRef={actionRef}
       cardBordered
       request={async (params, sort, filter) => {
-        console.log(sort, filter)
-        await waitTime(2000)
-        return request<{
-          data: GithubIssueItem[]
-        }>('https://proapi.azurewebsites.net/github/issues', {
-          params
-        })
+        console.log(params, sort, filter)
+        const res = await userApi.search()
+        return {
+          data: res.data,
+          success: res.success,
+          total: 10
+        }
       }}
       editable={{
         type: 'multiple'

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Button, Dropdown } from 'antd'
+import { Dropdown } from 'antd'
 import { PageContainer, ProCard, ProLayout } from '@ant-design/pro-components'
 import { GithubFilled, InfoCircleFilled, QuestionCircleFilled } from '@ant-design/icons'
 import type { ProSettings } from '@ant-design/pro-components'
@@ -130,13 +130,6 @@ const BasicLayout = () => {
             routes: []
           }}
           onBack={() => navigate(-1)}
-          extra={[
-            <Button key="3">操作</Button>,
-            <Button key="2">操作</Button>,
-            <Button key="1" type="primary">
-              主操作
-            </Button>
-          ]}
         >
           <ProCard
             style={{
