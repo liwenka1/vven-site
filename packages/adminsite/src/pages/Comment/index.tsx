@@ -13,11 +13,41 @@ const columns: ProColumns<UserWithoutPassword>[] = [
     width: 48
   },
   {
-    title: '标题',
-    dataIndex: 'title',
+    title: 'Username',
+    dataIndex: 'username',
     copyable: true,
     ellipsis: true,
-    tip: '标题过长会自动收缩',
+    tip: '过长会自动收缩',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项'
+        }
+      ]
+    }
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    copyable: true,
+    ellipsis: true,
+    tip: '过长会自动收缩',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项'
+        }
+      ]
+    }
+  },
+  {
+    title: 'Nickname',
+    dataIndex: 'nickname',
+    copyable: true,
+    ellipsis: true,
+    tip: '过长会自动收缩',
     formItemProps: {
       rules: [
         {
@@ -29,50 +59,33 @@ const columns: ProColumns<UserWithoutPassword>[] = [
   },
   {
     disable: true,
-    title: '状态',
-    dataIndex: 'state',
-    filters: true,
-    onFilter: true,
-    ellipsis: true,
+    title: 'Role',
+    dataIndex: 'role',
+    search: false,
+    renderFormItem: (_, { defaultRender }) => {
+      return defaultRender(_)
+    },
+    render: (_, record) => (
+      <Space>
+        <Tag>{record.role}</Tag>
+      </Space>
+    ),
     valueType: 'select',
     valueEnum: {
-      all: { text: '超长'.repeat(50) },
-      open: {
-        text: '未解决',
-        status: 'Error'
+      admin: {
+        text: 'admin'
       },
-      closed: {
-        text: '已解决',
-        status: 'Success',
-        disabled: true
-      },
-      processing: {
-        text: '解决中',
-        status: 'Processing'
+      user: {
+        text: 'user'
       }
     }
   },
   {
-    title: '创建时间',
-    key: 'showTime',
-    dataIndex: 'created_at',
+    title: 'CreateTime',
+    key: 'createTime',
+    dataIndex: 'createTime',
     valueType: 'date',
-    sorter: true,
-    hideInSearch: true
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'created_at',
-    valueType: 'dateRange',
-    hideInTable: true,
-    search: {
-      transform: (value) => {
-        return {
-          startTime: value[0],
-          endTime: value[1]
-        }
-      }
-    }
+    sorter: true
   },
   {
     title: '操作',
@@ -87,9 +100,7 @@ const columns: ProColumns<UserWithoutPassword>[] = [
       >
         编辑
       </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        查看
-      </a>,
+      <a key="view">查看</a>,
       <TableDropdown
         key="actionGroup"
         onSelect={() => action?.reload()}
@@ -115,11 +126,16 @@ const Comment = () => {
         return {
           data: res.data,
           success: res.success,
-          total: 10
+          total: res.data.length
         }
       }}
       editable={{
-        type: 'multiple'
+        type: 'multiple',
+        onSave: async (_, record) => {
+          console.log('保存', record)
+          const { index, ...params } = record
+          await userApi.update(params)
+        }
       }}
       columnsState={{
         persistenceKey: 'pro-table-singe-demos',
@@ -165,30 +181,7 @@ const Comment = () => {
           type="primary"
         >
           新建
-        </Button>,
-        <Dropdown
-          key="menu"
-          menu={{
-            items: [
-              {
-                label: '1st item',
-                key: '1'
-              },
-              {
-                label: '2nd item',
-                key: '1'
-              },
-              {
-                label: '3rd item',
-                key: '1'
-              }
-            ]
-          }}
-        >
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Dropdown>
+        </Button>
       ]}
     />
   )

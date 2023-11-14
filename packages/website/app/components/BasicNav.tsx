@@ -39,7 +39,9 @@ const BasicNav = () => {
           {menuItems.map((item, index) => (
             <NavbarItem key={`${item}-${index}`}>
               <Link
-                className={clsx(`/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4')}
+                className={clsx(
+                  `/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4'
+                )}
                 href={item.toLocaleLowerCase()}
               >
                 {item}
@@ -56,7 +58,10 @@ const BasicNav = () => {
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
-                className={clsx(`w-full`, `/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4')}
+                className={clsx(
+                  `w-full`,
+                  `/${item.toLocaleLowerCase()}` === path && 'underline decoration-wavy underline-offset-4'
+                )}
                 href={item.toLocaleLowerCase()}
               >
                 {item}
