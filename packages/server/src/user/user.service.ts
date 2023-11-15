@@ -51,7 +51,7 @@ export class UserService {
     if (orderBy) {
       return users
     } else {
-      return users.sort((a, b) => (a.role === 'admin' ? -1 : b.role === 'admin' ? 1 : 0))
+      return users.sort((a, b) => (a.role === 'ADMIN' ? -1 : b.role === 'ADMIN' ? 1 : 0))
     }
   }
 
@@ -60,7 +60,9 @@ export class UserService {
     if (first) {
       throw new CustomException('用户已存在！')
     } else {
-      filters.password = md5(filters.password)
+      if (filters.password) {
+        filters.password = md5(filters.password)
+      }
       await this.prisma.user.create({
         data: filters
       })
@@ -101,12 +103,12 @@ export class UserService {
     if (isFirst) {
       await this.create({
         ...params,
-        role: 'admin'
+        role: 'ADMIN'
       })
     } else {
       await this.create({
         ...params,
-        role: 'user'
+        role: 'USER'
       })
     }
   }

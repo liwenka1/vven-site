@@ -18,7 +18,12 @@ model User {
   email      String?   @db.VarChar(50)
   createTime DateTime? @default(now()) @db.Timestamp(0)
   avatarUrl  String?   @db.VarChar(255)
-  role       String?   @db.VarChar(50)
+  role       Role?
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 model Article {

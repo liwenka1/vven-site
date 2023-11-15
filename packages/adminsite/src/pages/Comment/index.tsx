@@ -1,10 +1,11 @@
 import { userApi } from '@/api/user'
 import { UserWithoutPassword } from '@/api/user/type'
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
+import {} from '@ant-design/icons'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable, TableDropdown } from '@ant-design/pro-components'
-import { Button, Dropdown, Space, Tag } from 'antd'
+import { Space, Tag } from 'antd'
 import { useRef } from 'react'
+import CommitModal from './CommitModal'
 
 const columns: ProColumns<UserWithoutPassword>[] = [
   {
@@ -61,7 +62,6 @@ const columns: ProColumns<UserWithoutPassword>[] = [
     disable: true,
     title: 'Role',
     dataIndex: 'role',
-    search: false,
     renderFormItem: (_, { defaultRender }) => {
       return defaultRender(_)
     },
@@ -72,11 +72,11 @@ const columns: ProColumns<UserWithoutPassword>[] = [
     ),
     valueType: 'select',
     valueEnum: {
-      admin: {
-        text: 'admin'
+      ADMIN: {
+        text: 'ADMIN'
       },
-      user: {
-        text: 'user'
+      USER: {
+        text: 'USER'
       }
     }
   },
@@ -100,12 +100,19 @@ const columns: ProColumns<UserWithoutPassword>[] = [
       >
         编辑
       </a>,
-      <a key="view">查看</a>,
+      <CommitModal type="update" />,
       <TableDropdown
         key="actionGroup"
-        onSelect={() => action?.reload()}
+        onSelect={async (key: string) => {
+          if (key === 'reset') {
+            console.log(key)
+          } else if (key === 'delete') {
+            console.log(record)
+            await userApi.delete({ id: record.id })
+          }
+        }}
         menus={[
-          { key: 'copy', name: '复制' },
+          { key: 'reset', name: '重置密码' },
           { key: 'delete', name: '删除' }
         ]}
       />
@@ -133,8 +140,8 @@ const Comment = () => {
         type: 'multiple',
         onSave: async (_, record) => {
           console.log('保存', record)
-          const { index, ...params } = record
-          await userApi.update(params)
+          delete record.index
+          await userApi.update(record)
         }
       }}
       columnsState={{
@@ -153,36 +160,14 @@ const Comment = () => {
           listsHeight: 400
         }
       }}
-      form={{
-        // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-        syncToUrl: (values, type) => {
-          if (type === 'get') {
-            return {
-              ...values,
-              created_at: [values.startTime, values.endTime]
-            }
-          }
-          return values
-        }
-      }}
+      form={{}}
       pagination={{
         pageSize: 5,
         onChange: (page) => console.log(page)
       }}
       dateFormatter="string"
       headerTitle="高级表格"
-      toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            actionRef.current?.reload()
-          }}
-          type="primary"
-        >
-          新建
-        </Button>
-      ]}
+      toolBarRender={() => [<CommitModal type="create" />]}
     />
   )
 }

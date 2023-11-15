@@ -19,7 +19,7 @@ const authLoader = () => {
 const roleLoader = () => {
   const role = useUserInfoStore.getState().profile?.role
 
-  if (role !== 'admin') {
+  if (role !== 'ADMIN') {
     return redirect('/')
   }
 

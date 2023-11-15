@@ -2,9 +2,9 @@ import { User } from '@prisma/client'
 
 export type UserWithoutPassword = Omit<User, 'password'>
 
-export type UserSearchFilters = Partial<Omit<User & { role: 'admin' | 'user' }, 'password'>>
+export type UserSearchFilters = Partial<Omit<User, 'password'>>
 
-export type UserCreateOrUpdateFilters = Partial<Omit<User & { role: 'admin' | 'user' }, 'id' | 'createTime'>>
+export type UserCreateOrUpdateFilters = Partial<Omit<User, 'id' | 'createTime'>>
 
 export type UserDeleteFilters = Pick<User, 'id'>
 
