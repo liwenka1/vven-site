@@ -100,7 +100,7 @@ const columns: ProColumns<UserWithoutPassword>[] = [
       >
         编辑
       </a>,
-      <CommitModal type="update" />,
+      <CommitModal key="modal" type="update" />,
       <TableDropdown
         key="actionGroup"
         onSelect={async (key: string) => {
