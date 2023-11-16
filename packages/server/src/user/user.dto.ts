@@ -1,8 +1,14 @@
 import { User } from '@prisma/client'
 
+interface UserSearchOrderBy {
+  orderBy?: {
+    createTime?: 'asc' | 'desc'
+  }
+}
+
 export type UserWithoutPassword = Omit<User, 'password'>
 
-export type UserSearchFilters = Partial<Omit<User, 'password'>>
+export type UserSearchFilters = Partial<Omit<User, 'password'>> & UserSearchOrderBy
 
 export type UserCreateOrUpdateFilters = Partial<Omit<User, 'id' | 'createTime'>>
 

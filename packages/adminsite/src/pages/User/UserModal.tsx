@@ -110,8 +110,8 @@ const UserModal: React.FC<UserModalProps> = ({ isModalOpen, setIsModalOpen, sear
           ))}
           <Form.Item name="role" label="Role" rules={[{ required: true }]}>
             <Select placeholder="Select a option and change input text above" allowClear>
-              <Option value="admin">admin</Option>
-              <Option value="user">user</Option>
+              <Option value="ADMIN">admin</Option>
+              <Option value="USER">user</Option>
             </Select>
           </Form.Item>
           <Form.Item {...tailLayout}>

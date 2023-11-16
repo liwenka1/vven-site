@@ -31,7 +31,7 @@ export class UserService {
     })
   }
 
-  async findMany(filters: UserSearchFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
+  async findMany(filters: UserSearchFilters): Promise<UserWithoutPassword[]> {
     const { orderBy, ...where } = filters
     const users = await this.prisma.user.findMany({
       where: where,
@@ -44,9 +44,7 @@ export class UserService {
         role: true,
         createTime: true
       },
-      orderBy: {
-        createTime: orderBy
-      }
+      orderBy: orderBy
     })
     if (orderBy) {
       return users

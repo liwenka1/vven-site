@@ -85,6 +85,7 @@ const columns: ProColumns<UserWithoutPassword>[] = [
     key: 'createTime',
     dataIndex: 'createTime',
     valueType: 'date',
+    editable: false,
     sorter: true
   },
   {
@@ -109,6 +110,7 @@ const columns: ProColumns<UserWithoutPassword>[] = [
           } else if (key === 'delete') {
             console.log(record)
             await userApi.delete({ id: record.id })
+            action?.reload()
           }
         }}
         menus={[
@@ -129,7 +131,8 @@ const Comment = () => {
       cardBordered
       request={async (params, sort, filter) => {
         console.log(params, sort, filter)
-        const res = await userApi.search()
+        const { current, pageSize, ...data } = params
+        const res = await userApi.search(data as UserWithoutPassword)
         return {
           data: res.data,
           success: res.success,
