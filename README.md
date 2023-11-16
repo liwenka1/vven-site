@@ -19,7 +19,7 @@ node: 18.18.2
 
 查看镜像：docker images
 
-删除镜像：docker rmi image_id
+删除镜像：docker rm image_id
 
 启动（停止的）容器：docker start 容器ID
 
