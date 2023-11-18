@@ -101,7 +101,7 @@ const columns: ProColumns<UserWithoutPassword>[] = [
       >
         编辑
       </a>,
-      <CommitModal key="modal" type="update" />,
+      <CommitModal key="modal" type="UPDATE" />,
       <TableDropdown
         key="actionGroup"
         onSelect={async (key: string) => {
@@ -170,7 +170,7 @@ const Comment = () => {
       }}
       dateFormatter="string"
       headerTitle="高级表格"
-      toolBarRender={() => [<CommitModal type="create" />]}
+      toolBarRender={() => [<CommitModal type="CREATE" />]}
     />
   )
 }

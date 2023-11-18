@@ -1,24 +1,49 @@
+import { userApi } from '@/api/user'
 import { PlusOutlined } from '@ant-design/icons'
-import { ModalForm, ProForm, ProFormDateRangePicker, ProFormSelect, ProFormText } from '@ant-design/pro-components'
+import {
+  ModalForm,
+  ProForm,
+  ProFormDateRangePicker,
+  ProFormSelect,
+  ProFormText,
+  ProFormUploadButton
+} from '@ant-design/pro-components'
 import { Button, message } from 'antd'
-
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, time)
-  })
-}
+import type { RcFile, UploadProps } from 'antd/es/upload/interface'
 
 interface CommitModalProps {
-  type: 'update' | 'create'
+  id?: number
+  type: 'UPDATE' | 'CREATE'
 }
 
-const CommitModal: React.FC<CommitModalProps> = ({ type }) => {
+const CommitModal: React.FC<CommitModalProps> = ({ id, type }) => {
+  const beforeUpload = (file: RcFile): boolean => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!')
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!')
+    }
+    return isJpgOrPng && isLt2M
+  }
+
+  const uploadFile: UploadProps['customRequest'] = async (options) => {
+    const { file } = options
+    const formData = new FormData()
+    formData.append('file', file)
+    if (id) {
+      formData.append('id', String(id))
+    }
+    const res = await userApi.upload(formData)
+    console.log(res)
+  }
+
   return (
     <ModalForm
       trigger={
-        type === 'create' ? (
+        type === 'CREATE' ? (
           <Button type="primary">
             <PlusOutlined />
             新增
@@ -28,7 +53,6 @@ const CommitModal: React.FC<CommitModalProps> = ({ type }) => {
         )
       }
       onFinish={async (values: unknown) => {
-        await waitTime(2000)
         console.log(values)
         message.success('提交成功')
       }}
@@ -38,8 +62,18 @@ const CommitModal: React.FC<CommitModalProps> = ({ type }) => {
       }}
     >
       <ProForm.Group>
-        <ProFormText width="md" name="name" label="签约客户名称" tooltip="最长为 24 位" placeholder="请输入名称" />
-        <ProFormText width="md" name="company" label="我方公司名称" placeholder="请输入名称" />
+        <ProFormUploadButton
+          name="avatar"
+          label="Avatar"
+          max={1}
+          fieldProps={{
+            name: 'avatar',
+            listType: 'picture-card',
+            showUploadList: false,
+            beforeUpload: beforeUpload,
+            customRequest: uploadFile
+          }}
+        />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormText name={['contract', 'name']} width="md" label="合同名称" placeholder="请输入名称" />

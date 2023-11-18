@@ -12,7 +12,7 @@ import {
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 import { CustomException } from '@/common/exceptions/custom.business'
-import { User } from '@prisma/client'
+import { User, Prisma } from '@prisma/client'
 
 const md5 = (s: string) => {
   return crypto.createHash('md5').update(s).digest('hex')
@@ -32,9 +32,21 @@ export class UserService {
   }
 
   async findMany(filters: UserSearchFilters): Promise<UserWithoutPassword[]> {
-    const { orderBy, ...where } = filters
+    const { orderBy, createTime, ...data } = filters
+    let where: Prisma.UserWhereInput = {}
+    if (createTime) {
+      where = {
+        ...data,
+        createTime: {
+          gte: new Date(createTime),
+          lt: new Date(new Date(createTime).getTime() + 24 * 60 * 60 * 1000)
+        }
+      }
+    } else {
+      where = { ...data }
+    }
     const users = await this.prisma.user.findMany({
-      where: where,
+      where,
       select: {
         id: true,
         avatarUrl: true,
@@ -44,7 +56,7 @@ export class UserService {
         role: true,
         createTime: true
       },
-      orderBy: orderBy
+      orderBy
     })
     if (orderBy) {
       return users
