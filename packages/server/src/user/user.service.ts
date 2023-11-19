@@ -6,8 +6,8 @@ import {
   UserLoginParams,
   UserRegisterParams,
   UserResetParams,
-  UserSearchFilters,
-  UserWithoutPassword
+  UserSearchData,
+  UserSearchFilters
 } from './user.dto'
 import * as crypto from 'crypto'
 import { JwtService } from '@nestjs/jwt'
@@ -31,8 +31,8 @@ export class UserService {
     })
   }
 
-  async findMany(filters: UserSearchFilters): Promise<UserWithoutPassword[]> {
-    const { orderBy, createTime, ...data } = filters
+  async findMany(filters: UserSearchFilters): Promise<UserSearchData> {
+    const { orderBy, createTime, current, pageSize, ...data } = filters
     let where: Prisma.UserWhereInput = {}
     if (createTime) {
       where = {
@@ -56,12 +56,16 @@ export class UserService {
         role: true,
         createTime: true
       },
-      orderBy
+      orderBy,
+      skip: (current - 1) * pageSize,
+      take: pageSize
     })
+    const total = await this.prisma.user.count({ where })
     if (orderBy) {
-      return users
+      return { total, users }
     } else {
-      return users.sort((a, b) => (a.role === 'ADMIN' ? -1 : b.role === 'ADMIN' ? 1 : 0))
+      const sortedUsers = users.sort((a, b) => (a.role === 'ADMIN' ? -1 : b.role === 'ADMIN' ? 1 : 0))
+      return { total, users: sortedUsers }
     }
   }
 

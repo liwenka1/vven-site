@@ -6,7 +6,8 @@ import {
   UserDeleteFilters,
   UserLoginParams,
   UserRegisterParams,
-  UserResetParams
+  UserResetParams,
+  UserSearchData
 } from './type'
 import { ResponseData } from '@/type'
 
@@ -23,8 +24,8 @@ export const userApi = {
   profile: () => {
     return http.get<ResponseData<UserWithoutPassword>>('user/profile')
   },
-  search: (params?: UserSearchFilters & { orderBy?: 'asc' | 'desc' }) => {
-    return http.post<ResponseData<UserWithoutPassword[]>>('user/search', params)
+  search: (params?: UserSearchFilters) => {
+    return http.post<ResponseData<UserSearchData>>('user/search', params)
   },
   create: (params: UserCreateOrUpdateFilters) => {
     return http.post<ResponseData<void>>('user/create', params)

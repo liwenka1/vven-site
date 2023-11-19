@@ -5,8 +5,8 @@ import {
   UserDeleteFilters,
   UserRegisterParams,
   UserResetParams,
-  UserSearchFilters,
-  UserWithoutPassword
+  UserSearchData,
+  UserSearchFilters
 } from './user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/common/metadata/public.metadata'
@@ -41,7 +41,7 @@ export class UserController {
   }
 
   @Post('search')
-  search(@Body() params: UserSearchFilters & { orderBy?: 'asc' | 'desc' }): Promise<UserWithoutPassword[]> {
+  search(@Body() params: UserSearchFilters): Promise<UserSearchData> {
     return this.userService.findMany(params)
   }
 

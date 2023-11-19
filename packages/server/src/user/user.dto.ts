@@ -8,7 +8,10 @@ interface UserSearchOrderBy {
 
 export type UserWithoutPassword = Omit<User, 'password'>
 
-export type UserSearchFilters = Partial<Omit<User, 'password'>> & UserSearchOrderBy
+export type UserSearchFilters = Partial<Omit<User, 'password'>> &
+  UserSearchOrderBy & { current?: number; pageSize?: number }
+
+export type UserSearchData = { total: number; users: UserWithoutPassword[] }
 
 export type UserCreateOrUpdateFilters = Partial<Omit<User, 'id' | 'createTime'>>
 

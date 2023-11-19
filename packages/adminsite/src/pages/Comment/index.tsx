@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import { UserWithoutPassword } from '@/api/user/type'
+import { UserSearchFilters, UserWithoutPassword } from '@/api/user/type'
 import {} from '@ant-design/icons'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable, TableDropdown } from '@ant-design/pro-components'
@@ -131,12 +131,11 @@ const Comment = () => {
       cardBordered
       request={async (params, sort, filter) => {
         console.log(params, sort, filter)
-        const { current, pageSize, ...data } = params
-        const res = await userApi.search(data as UserWithoutPassword)
+        const res = await userApi.search(params as UserSearchFilters)
         return {
-          data: res.data,
+          data: res.data.users,
           success: res.success,
-          total: res.data.length
+          total: res.data.total
         }
       }}
       editable={{
