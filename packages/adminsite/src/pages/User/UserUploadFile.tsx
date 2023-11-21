@@ -17,9 +17,9 @@ const beforeUpload = (file: RcFile): boolean => {
 }
 
 interface UserUploadFileProps {
-  id?: number
+  id: number
   avatarUrl?: string
-  onUploadSuccess: (url: string) => void
+  onUploadSuccess: (id: number, url: string) => void
 }
 
 const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUploadSuccess }) => {
@@ -35,7 +35,7 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUpload
     }
     const res = await userApi.upload(formData)
     setLoading(false)
-    onUploadSuccess(res.data)
+    onUploadSuccess(id, res.data)
   }
 
   const uploadButton = (
@@ -47,16 +47,20 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUpload
 
   return (
     <>
-      <Upload
-        name="avatar"
-        listType="picture-circle"
-        className="avatar-uploader"
-        showUploadList={false}
-        beforeUpload={beforeUpload}
-        customRequest={uploadFile}
-      >
-        {avatarUrl ? <Avatar className="w-full h-full" src={avatarUrl} alt="avatar" size="large" /> : uploadButton}
-      </Upload>
+      {avatarUrl ? (
+        <Avatar src={avatarUrl} alt="avatar" size="small" />
+      ) : (
+        <Upload
+          name="avatar"
+          listType="picture-circle"
+          className="avatar-uploader"
+          showUploadList={false}
+          beforeUpload={beforeUpload}
+          customRequest={uploadFile}
+        >
+          {uploadButton}
+        </Upload>
+      )}
     </>
   )
 }

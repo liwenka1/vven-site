@@ -1,5 +1,7 @@
 import { userApi } from '@/api/user'
-import { UserWithoutPassword } from '@/api/user/type'
+import { UserCreateOrUpdateFilters, UserWithoutPassword } from '@/api/user/type'
+import useMessageApi from '@/hooks/useMessageApi '
+import { ResponseData } from '@/type'
 import { PlusOutlined } from '@ant-design/icons'
 import { ModalForm, ProForm, ProFormSelect, ProFormText, ProFormUploadButton } from '@ant-design/pro-components'
 import { Button, message } from 'antd'
@@ -12,6 +14,8 @@ interface CommitModalProps {
 }
 
 const CommitModal: React.FC<CommitModalProps> = ({ id, initialValues, type }) => {
+  const { contextHolder, warning, success } = useMessageApi()
+
   const beforeUpload = (file: RcFile): boolean => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
     if (!isJpgOrPng) {
@@ -35,25 +39,47 @@ const CommitModal: React.FC<CommitModalProps> = ({ id, initialValues, type }) =>
     console.log(res)
   }
 
-  return (
-    <ModalForm
-      trigger={
-        type === 'CREATE' ? (
-          <Button type="primary">
-            <PlusOutlined />
-            新增
-          </Button>
-        ) : (
-          <a key="view">查看</a>
-        )
+  const onFinish = async (values: unknown) => {
+    const params = values as UserCreateOrUpdateFilters
+    try {
+      if (type === 'CREATE') {
+        await userApi.create({ ...params })
+        success('添加用户成功！')
+      } else if (type === 'UPDATE') {
+        if (initialValues) {
+          await userApi.update({ id: initialValues.id, ...params })
+          // if (initialValues.id === profile?.id) {
+          //   setToken(null)
+          //   setProfile(null)
+          //   navigate('/login')
+          // }
+          success('修改用户成功！')
+        }
       }
-      onFinish={async (values: unknown) => {
-        console.log(values)
-        message.success('提交成功')
-      }}
-      initialValues={initialValues}
-    >
-      <ProForm.Group>
+    } catch (error) {
+      const customError = error as ResponseData<null>
+      warning(customError.message)
+    }
+  }
+
+  return (
+    <>
+      {contextHolder}
+      <ModalForm
+        trigger={
+          type === 'CREATE' ? (
+            <Button type="primary">
+              <PlusOutlined />
+              新增
+            </Button>
+          ) : (
+            <a key="view">查看</a>
+          )
+        }
+        onFinish={onFinish}
+        initialValues={initialValues}
+      >
+        <ProForm.Group>
         <ProFormUploadButton
           name="avatar"
           label="Avatar"
@@ -67,26 +93,27 @@ const CommitModal: React.FC<CommitModalProps> = ({ id, initialValues, type }) =>
           }}
         />
       </ProForm.Group>
-      <ProFormText width="md" name="username" label="Username" />
-      <ProFormText width="md" name="email" label="Email" />
-      {type === 'CREATE' && <ProFormText width="md" name="password" label="Password" />}
-      <ProFormText width="md" name="nickname" label="Nickname" />
-      <ProFormSelect
-        width="md"
-        options={[
-          {
-            value: 'ADMIN',
-            label: 'admin'
-          },
-          {
-            value: 'USER',
-            label: 'user'
-          }
-        ]}
-        name="role"
-        label="Role"
-      />
-    </ModalForm>
+        <ProFormText width="md" name="username" label="Username" />
+        <ProFormText width="md" name="email" label="Email" />
+        {type === 'CREATE' && <ProFormText width="md" name="password" label="Password" />}
+        <ProFormText width="md" name="nickname" label="Nickname" />
+        <ProFormSelect
+          width="md"
+          options={[
+            {
+              value: 'ADMIN',
+              label: 'admin'
+            },
+            {
+              value: 'USER',
+              label: 'user'
+            }
+          ]}
+          name="role"
+          label="Role"
+        />
+      </ModalForm>
+    </>
   )
 }
 

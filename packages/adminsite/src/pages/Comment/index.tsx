@@ -6,6 +6,11 @@ import { ProTable, TableDropdown } from '@ant-design/pro-components'
 import { Space, Tag } from 'antd'
 import { useRef } from 'react'
 import CommitModal from './CommitModal'
+import UserUploadFile from '../User/UserUploadFile'
+
+const onUploadSuccess = async (id: number, avatarUrl: string) => {
+  await userApi.update({ id: id, avatarUrl: avatarUrl })
+}
 
 const columns: ProColumns<UserWithoutPassword>[] = [
   {
@@ -60,11 +65,9 @@ const columns: ProColumns<UserWithoutPassword>[] = [
   },
   {
     disable: true,
+    search: false,
     title: 'Role',
     dataIndex: 'role',
-    renderFormItem: (_, { defaultRender }) => {
-      return defaultRender(_)
-    },
     render: (_, record) => (
       <Space>
         <Tag>{record.role}</Tag>
@@ -79,6 +82,18 @@ const columns: ProColumns<UserWithoutPassword>[] = [
         text: 'USER'
       }
     }
+  },
+  {
+    disable: true,
+    search: false,
+    editable: false,
+    title: 'AvatarUrl',
+    dataIndex: 'avatarUrl',
+    render: (_, record) => (
+      <Space>
+        <UserUploadFile id={record.id} avatarUrl={record.avatarUrl} onUploadSuccess={onUploadSuccess} />
+      </Space>
+    )
   },
   {
     title: 'CreateTime',
