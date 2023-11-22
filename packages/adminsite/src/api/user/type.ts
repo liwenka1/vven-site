@@ -9,7 +9,7 @@ interface User {
   role: 'ADMIN' | 'USER'
 }
 
-interface UserSearchOrderBy {
+export interface UserSearchOrderBy {
   orderBy?: {
     createTime?: 'asc' | 'desc'
   }

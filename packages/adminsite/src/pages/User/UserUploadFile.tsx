@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { Avatar, message, Upload } from 'antd'
+import { UploadOutlined } from '@ant-design/icons'
+import { Avatar, Button, message, Upload } from 'antd'
 import type { RcFile, UploadProps } from 'antd/es/upload/interface'
 import { userApi } from '@/api/user'
+import { ProCoreActionType } from '@ant-design/pro-components'
 
 const beforeUpload = (file: RcFile): boolean => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -19,10 +20,10 @@ const beforeUpload = (file: RcFile): boolean => {
 interface UserUploadFileProps {
   id: number
   avatarUrl?: string
-  onUploadSuccess: (id: number, url: string) => void
+  action?: ProCoreActionType
 }
 
-const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUploadSuccess }) => {
+const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, action }) => {
   const [loading, setLoading] = useState(false)
 
   const uploadFile: UploadProps['customRequest'] = async (options) => {
@@ -35,33 +36,27 @@ const UserUploadFile: React.FC<UserUploadFileProps> = ({ id, avatarUrl, onUpload
     }
     const res = await userApi.upload(formData)
     setLoading(false)
-    onUploadSuccess(id, res.data)
+    await userApi.update({ id: id, avatarUrl: res.data })
+    action?.reload()
   }
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  )
-
   return (
-    <>
-      {avatarUrl ? (
-        <Avatar src={avatarUrl} alt="avatar" size="small" />
-      ) : (
-        <Upload
-          name="avatar"
-          listType="picture-circle"
-          className="avatar-uploader"
-          showUploadList={false}
-          beforeUpload={beforeUpload}
-          customRequest={uploadFile}
-        >
-          {uploadButton}
-        </Upload>
-      )}
-    </>
+    <div className="flex items-center justify-center">
+      <Avatar src={avatarUrl} alt="avatar" size="small" />
+      <Upload
+        name="avatar"
+        className="avatar-uploader"
+        showUploadList={false}
+        beforeUpload={beforeUpload}
+        customRequest={uploadFile}
+      >
+        {
+          <Button type="link" loading={loading} icon={<UploadOutlined />}>
+            {avatarUrl ? 'Update Avatar' : 'Upload Avatar'}
+          </Button>
+        }
+      </Upload>
+    </div>
   )
 }
 

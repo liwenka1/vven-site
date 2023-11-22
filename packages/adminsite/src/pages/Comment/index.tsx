@@ -1,6 +1,5 @@
 import { userApi } from '@/api/user'
 import { UserSearchFilters, UserWithoutPassword } from '@/api/user/type'
-import {} from '@ant-design/icons'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable, TableDropdown } from '@ant-design/pro-components'
 import { Space, Tag } from 'antd'
@@ -8,14 +7,11 @@ import { useRef } from 'react'
 import CommitModal from './CommitModal'
 import UserUploadFile from '../User/UserUploadFile'
 
-const onUploadSuccess = async (id: number, avatarUrl: string) => {
-  await userApi.update({ id: id, avatarUrl: avatarUrl })
-}
-
 const columns: ProColumns<UserWithoutPassword>[] = [
   {
-    dataIndex: 'index',
-    valueType: 'indexBorder',
+    title: 'Id',
+    dataIndex: 'id',
+    editable: false,
     width: 48
   },
   {
@@ -87,17 +83,16 @@ const columns: ProColumns<UserWithoutPassword>[] = [
     disable: true,
     search: false,
     editable: false,
-    title: 'AvatarUrl',
+    title: 'Avatar',
     dataIndex: 'avatarUrl',
-    render: (_, record) => (
+    render: (_, record, __, action) => (
       <Space>
-        <UserUploadFile id={record.id} avatarUrl={record.avatarUrl} onUploadSuccess={onUploadSuccess} />
+        <UserUploadFile id={record.id} avatarUrl={record.avatarUrl} action={action} />
       </Space>
     )
   },
   {
     title: 'CreateTime',
-    key: 'createTime',
     dataIndex: 'createTime',
     valueType: 'date',
     editable: false,
@@ -106,7 +101,6 @@ const columns: ProColumns<UserWithoutPassword>[] = [
   {
     title: '操作',
     valueType: 'option',
-    key: 'option',
     render: (_, record, __, action) => [
       <a
         key="editable"
@@ -146,7 +140,22 @@ const Comment = () => {
       cardBordered
       request={async (params, sort, filter) => {
         console.log(params, sort, filter)
-        const res = await userApi.search(params as UserSearchFilters)
+        const keys = Object.keys(sort)
+        const orderBy = {} as Record<string, 'asc' | 'desc'>
+        for (const key of keys) {
+          if (sort[key] === 'ascend') {
+            orderBy[key] = 'asc'
+          } else if (sort[key] === 'descend') {
+            orderBy[key] = 'desc'
+          }
+        }
+        let searchParams: UserSearchFilters = {}
+        if (keys.length) {
+          searchParams = { ...params, orderBy }
+        } else {
+          searchParams = { ...params }
+        }
+        const res = await userApi.search(searchParams)
         return {
           data: res.data.users,
           success: res.success,
